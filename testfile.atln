@@ -1,0 +1,12 @@
+#[version=1]
+#[driver_ver=0.1.1]
+
+var test = "";
+test = "";
+
+#:InputTextboxByLabelExact("id", "sysadmin");
+#:InputTextboxByLabelExact("pass", "superuser");
+#:ClickElementByText("Login");
+
+#:InputTextboxByLabelExact("field1", "123");
+#:InputTextboxByLabelExact("field2", "asd");

@@ -1,0 +1,64 @@
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" | "\r\n" }
+COMMENT = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+INLINE_COMMENT = @{ "//" ~ (!NEWLINE ~ ANY)* ~ NEWLINE }
+
+program = _{ SOI ~ cfg_section* ~ (statement | INLINE_COMMENT)* ~ EOI }
+
+statement = { (var_declaration | var_assignment | escape_block | expr  ) ~ ";" }
+
+cfg_assign_pair = { ident_char+ ~ "=" ~ char* } 
+cfg_section = { "#[" ~ cfg_assign_pair ~ "]"}
+
+var_declaration = @{ "var " ~ var_assignment }
+var_assignment = !{ identifier ~ "=" ~ expr }
+
+expr = { basic_expr ~ ( ( add_op | sub_op | div_op | mul_op | mod_op | pow_op ) ~ basic_expr )* }
+basic_expr = { logic_op | comp_op | string | number | array_access | function_call | member_access }
+
+escape_block = { "unparsed" ~ "###{" ~ (!("}###") ~ ANY)* ~ "}###" }
+
+logic_op = { ( comp_op | comparable ) ~ ( and_op | or_op ) ~ ( comp_op | comparable  ) }
+
+comp_op = { comparable ~ ( eq_op | ne_op | le_op | lt_op | ge_op | gt_op  ) ~ comparable }
+comparable = { string | number | member_access }
+
+array_access = { member_access ~ "[" ~ indexable_expr ~ "]" }
+indexable_expr = { number | function_call | member_access }
+
+function_call = { member_access ~ ( "()" | "(" ~ comma_separated_expr ~ ")") }
+comma_separated_expr = !{ expr ~ ( "," ~ expr)* }
+package = { identifier+ | aliases }
+aliases = { "#" }
+member_access = { ( package ~ ":" )? ~ identifier ~ ( "." ~ identifier )* }
+atomic_expression = { identifier | string | number }
+identifier = @{ ident_char+ }
+
+ident_char = @{ ASCII_ALPHANUMERIC | "_" }
+char = @{
+    ASCII_ALPHANUMERIC | "." | "_" | "/" | WHITESPACE
+}
+
+string = @{ "\"" ~ inner ~ "\"" }
+inner = @{ char* }
+
+number = { ("+" | "-")? ~ ASCII_DIGIT+ }
+
+// Arithmetic op
+add_op = { "+" }
+sub_op = { "-" }
+div_op = { "/" }
+mul_op = { "*" }
+mod_op = { "%" }
+pow_op = { "^" }
+
+// Relational op
+eq_op = { "==" }
+ne_op = { "!=" }
+lt_op = { "<" }
+le_op = { "<=" }
+gt_op = { ">" }
+ge_op = { ">=" }
+
+// Logic op
+and_op = { "&&" }
+or_op = { "||" }
