@@ -6,14 +6,19 @@ program = _{ SOI ~ cfg_section* ~ (statement | INLINE_COMMENT)* ~ EOI }
 
 statement = { (var_declaration | var_assignment | escape_block | expr  ) ~ ";" }
 
-cfg_assign_pair = { ident_char+ ~ "=" ~ char* } 
+cfg_value_char = { ASCII_ALPHANUMERIC | "." | "_" | "/" | "*" }
+cfg_value = @{ (cfg_value_char+ | "\"" ~ cfg_value_char+ ~ "\"") }
+cfg_key = @{ ident_char+ }
+cfg_assign_pair = { cfg_key ~ "=" ~ cfg_value } 
 cfg_section = { "#[" ~ cfg_assign_pair ~ "]"}
 
 var_declaration = @{ "var " ~ var_assignment }
 var_assignment = !{ identifier ~ "=" ~ expr }
 
 expr = { basic_expr ~ ( ( add_op | sub_op | div_op | mul_op | mod_op | pow_op ) ~ basic_expr )* }
-basic_expr = { logic_op | comp_op | string | number | array_access | function_call | member_access }
+basic_expr = { logic_op | comp_op | string | number | array_access | function_call | byoption_enum | member_access }
+
+byoption_enum = @{ "ByOption." ~ ident_char+ }
 
 escape_block = { "unparsed" ~ "###{" ~ (!("}###") ~ ANY)* ~ "}###" }
 
@@ -34,12 +39,17 @@ atomic_expression = { identifier | string | number }
 identifier = @{ ident_char+ }
 
 ident_char = @{ ASCII_ALPHANUMERIC | "_" }
-char = @{
-    ASCII_ALPHANUMERIC | "." | "_" | "/" | WHITESPACE
-}
 
+char = @{
+    ASCII_ALPHANUMERIC | "." | "_" | "/" | "*" | WHITESPACE
+}
+string_char = {
+    !("\"" | "\\") ~ ANY
+    | "\\" ~ ("\"" | "\\" | "/" | "b" | "f" | "n" | "r" | "t")
+    | "\\" ~ ("u" ~ ASCII_HEX_DIGIT{4})
+}
+inner = @{ string_char* }
 string = @{ "\"" ~ inner ~ "\"" }
-inner = @{ char* }
 
 number = { ("+" | "-")? ~ ASCII_DIGIT+ }
 
