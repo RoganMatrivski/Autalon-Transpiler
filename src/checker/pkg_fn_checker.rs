@@ -58,13 +58,13 @@ lazy_static! {
             (
                 "ClickElementByString",
                 "builtin",
-                vec!["string", "ByOption", "string", "string"],
+                vec!["string", "ByOption", "string"],
                 "void"
             ),
             (
                 "ClickElementByStringExact",
                 "builtin",
-                vec!["string", "ByOption", "string", "string"],
+                vec!["string", "ByOption", "string"],
                 "void"
             ),
             (
