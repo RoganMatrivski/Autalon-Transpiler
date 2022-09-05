@@ -29,6 +29,19 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
+
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+}
+
+#[wasm_bindgen(start)]
+pub fn startup() {
+    utils::set_panic_hook();
+    log(format!(
+        "Autalon Transpiler initialized! Currently running version: {}",
+        env!("CARGO_PKG_VERSION")
+    )
+    .as_str());
 }
 
 #[wasm_bindgen]
@@ -38,6 +51,8 @@ pub fn greet() {
 
 #[wasm_bindgen]
 pub fn transpile_groovy(code: &str) -> String {
+    log(format!("Attempting to transpile code below:\n\n{}", code).as_str());
+
     let parsed = AutalonParser::parse(Rule::program, code).expect("Failed to parse");
 
     let mut checked_pair: Vec<Pair<Rule>> = vec![];
