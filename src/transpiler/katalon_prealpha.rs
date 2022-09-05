@@ -156,7 +156,7 @@ pub fn statement_handler(pair: Pair<Rule>) -> Result<String, String> {
         Rule::var_declaration => var_declaration_convert(stmt)?,
         Rule::var_assignment => var_assignment_convert(stmt)?,
         Rule::escape_block => "".to_string(),
-        _ => unreachable!(),
+        _ => unreachable!("{:?} is not implemented yet!", stmt.as_rule()),
     } + ";")
 }
 
@@ -344,7 +344,10 @@ fn fn_convert(pairs: Pair<Rule>) -> Result<String, String> {
             }
         }
         1 => (None, None, fn_tokens.get(0).unwrap()),
-        _ => unreachable!(),
+        _ => unreachable!(
+            "Invalid function token length! Expected token count: 3; Received token count: {}",
+            fn_tokens.len()
+        ),
     };
 
     let converted_args = match args {

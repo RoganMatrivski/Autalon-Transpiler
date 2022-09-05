@@ -22,7 +22,7 @@ pub fn get_pair_return_type(pair: Pair<Rule>) -> Result<String, String> {
         Rule::comparable => get_pair_return_type(unwrap_inner(pair)),
         Rule::atomic_expression => get_pair_return_type(unwrap_inner(pair)),
         Rule::basic_expr => get_pair_return_type(unwrap_inner(pair)),
-        _ => unreachable!(),
+        _ => unreachable!("{:?} is not implemented yet!", pair.as_rule()),
     }
 }
 
@@ -82,7 +82,10 @@ fn get_fn_pair_return_type(pair: Pair<Rule>) -> Result<String, String> {
             }
         }
         1 => (None, None, fn_tokens.get(0).unwrap()),
-        _ => unreachable!(),
+        _ => unreachable!(
+            "Invalid function token length! Expected token count: 3; Received token count: {}",
+            fn_tokens.len()
+        ),
     };
 
     let parsed_args = match args {
@@ -144,7 +147,10 @@ fn get_member_return_type(pair: Pair<Rule>) -> Result<String, String> {
             fn_tokens.get(1).unwrap(),
         ),
         1 => (None, fn_tokens.get(0).unwrap()),
-        _ => unreachable!(),
+        _ => unreachable!(
+            "Invalid function token length! Expected token count: 3; Received token count: {}",
+            fn_tokens.len()
+        ),
     };
 
     match pkg_name {

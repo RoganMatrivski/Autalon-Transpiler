@@ -17,7 +17,7 @@ pub fn statement_checker(pair: Pair<Rule>) -> Result<(), String> {
             Rule::var_declaration => var_state_checker::check_var_declaration(stmt)?,
             Rule::var_assignment => var_state_checker::check_var_assignment(stmt)?,
             Rule::escape_block => (),
-            _ => unreachable!(),
+            _ => unreachable!("{:?} is not implemented yet!", stmt.as_rule()),
         }
     }
     Ok(())
