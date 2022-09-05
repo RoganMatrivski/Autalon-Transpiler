@@ -1,4 +1,7 @@
+use std::collections::HashMap;
+
 use pest::iterators::Pair;
+use strfmt::strfmt;
 
 use crate::{
     common_func::unwrap_inner,
@@ -9,33 +12,49 @@ use crate::{
 lazy_static! {
     static ref FN_MAP: Vec<PackageFuncMap> = Vec::from(
         [
-            ("builtin", "GetElementByString", "GetElementByXPath_MAPPED"),
-            ("builtin", "GetElementByStringExact", "GetElementByXPath_MAPPED"),
+            ("builtin", "GetElementByText", "driverExt.getElement().containingString({arg1}, ByOption.Text, {arg2}).untilElementInteractable()"),
+            ("builtin", "GetElementByTextExact", "driverExt.getElement().containingStringExact({arg1}, ByOption.Text, {arg2}).untilElementInteractable()"),
+            ("builtin", "GetElementByString", "driverExt.getElement().containingString({arg1}, {arg2}, {arg3}).untilElementInteractable()"),
+            ("builtin", "GetElementByStringExact", "driverExt.getElement().containingStringExact({arg1}, {arg2}, {arg3}).untilElementInteractable()"),
 
-            ("builtin", "ClickElementByText", "GetElementByXPath_MAPPED"),
-            ("builtin", "ClickElementByTextExact", "GetElementByXPath_MAPPED"),
-            ("builtin", "ClickElementByString", "GetElementByXPath_MAPPED"),
-            ("builtin", "ClickElementByStringExact", "GetElementByXPath_MAPPED"),
+            ("builtin", "ClickElementByText", "driverExt.getElement().containingString({arg1}, ByOption.Text, {arg2}).untilElementInteractable().click()"),
+            ("builtin", "ClickElementByTextExact", "driverExt.getElement().containingStringExact({arg1}, ByOption.Text, {arg2}).untilElementInteractable().click()"),
+            ("builtin", "ClickElementByString", "driverExt.getElement().containingString({arg1}, {arg2}, {arg3}).untilElementInteractable().click()"),
+            ("builtin", "ClickElementByStringExact", "driverExt.getElement().containingStringExact({arg1}, {arg2}, {arg3}).untilElementInteractable().click()"),
 
-            ("builtin", "SendTextToElementByText", "GetElementByXPath_MAPPED"),
-            ("builtin", "SendTextToElementByTextExact", "GetElementByXPath_MAPPED"),
-            ("builtin", "SendTextToElementByString", "GetElementByXPath_MAPPED"),
-            ("builtin", "SendTextToElementByStringExact", "GetElementByXPath_MAPPED"),
+            ("builtin", "SendTextToElementByText", "driverExt.getElement().containingString({arg1}, ByOption.Text, {arg3}).untilElementInteractabl.sendKeys({arg2})"),
+            ("builtin", "SendTextToElementByTextExact", "driverExt.getElement().containingStringExact({arg1}, ByOption.Text, {arg3}).untilElementInteractabl.sendKeys({arg2})"),
+            ("builtin", "SendTextToElementByString", "driverExt.getElement().containingString({arg1}, {arg3}, {arg4}).untilElementInteractable().sendKeys({arg2})"),
+            ("builtin", "SendTextToElementByStringExact", "driverExt.getElement().containingStringExact({arg1}, {arg3}, {arg4}).untilElementInteractable().sendKeys({arg2})"),
 
-            // ("builtin", "InputDateByLabel", "GetElementByXPath_MAPPED"),
-            ("builtin", "InputDateByLabelExact", "GetElementByXPath_MAPPED"),
-            // ("builtin", "InputDropdownByLabel", "GetElementByXPath_MAPPED"),
-            ("builtin", "InputDropdownByLabelExact", "GetElementByXPath_MAPPED"),
-            // ("builtin", "InputHtmlByLabel", "GetElementByXPath_MAPPED"),
-            ("builtin", "InputHtmlByLabelExact", "GetElementByXPath_MAPPED"),
-            // ("builtin", "InputNumberTextboxByLabel", "GetElementByXPath_MAPPED"),
-            ("builtin", "InputNumberTextboxByLabelExact", "GetElementByXPath_MAPPED"),
-            // ("builtin", "InputRadioByLabel", "GetElementByXPath_MAPPED"),
-            ("builtin", "InputRadioByLabelExact", "GetElementByXPath_MAPPED"),
-            // ("builtin", "InputTextboxByLabel", "GetElementByXPath_MAPPED"),
-            ("builtin", "InputTextboxByLabelExact", "GetElementByXPath_MAPPED"),
-            ("builtin", "GetAttribute", "GetAttribute_MAPPED"),
-            ("builtin", "ClickWithLabel", "ClickWithLabel_MAPPED"),
+            ("builtin", "GetInputFromLabel", "new WebElementExtended(driver).getInputFromLabel({arg1})"),
+            ("builtin", "GetIFrameFromLabel", "new WebElementExtended(driver).getIFrameFromLabel({arg1})"),
+            ("builtin", "GetWindowFromLabel", "new WebElementExtended(driver).getWindowFromTitle({arg1})"),
+            ("builtin", "GetGroupFromLabel", "new WebElementExtended(driver).getGroupFromTitle({arg1})"),
+
+            // ("builtin", "InputDateByLabel", "InputDateByLabel"),
+            // ("builtin", "InputDropdownByLabel", "InputDropdownByLabel"),
+            // ("builtin", "InputHtmlByLabel", "InputHtmlByLabel"),
+            // ("builtin", "InputNumberTextboxByLabel", "InputNumberTextboxByLabel"),
+            // ("builtin", "InputRadioByLabel", "InputRadioByLabel"),
+            // ("builtin", "InputTextboxByLabel", "InputTextboxByLabel"),
+
+            ("builtin", "InputDateByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().date().sendText({arg2}, false)"),
+            ("builtin", "InputHtmlByLabelExact", "new WebElementExtended(driver).getIFrameFromLabel({arg1}).shouldBe().htmlEditor().sendText({arg2})"),
+            ("builtin", "InputNumberTextboxByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().numberTextbox().sendText({arg2})"),
+            ("builtin", "InputTextboxByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().textbox().sendText({arg2})"),
+            ("builtin", "InputDropdownUsingTextByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().dropdown().selectElementFromText({arg2})"),
+            ("builtin", "InputDropdownUsingIndexByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().dropdown().selectElementOnIndex({arg2})"),
+            ("builtin", "InputRadioUsingTextByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().radio().selectElementFromText({arg2})"),
+            ("builtin", "InputRadioUsingIndexByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().radio().selectElementOnIndex({arg2})"),
+
+            ("builtin", "GetAndSwitchToAnyIFrame", "driver = driverExt.waitUntilFrameLoads(By.xpath('//iframe')); driverExt = new WebDriverExtended(driver);"),
+            ("builtin", "GetAndSwitchToParentIFrame", "driver = driver.switchTo().parentFrame(); driverExt = new WebDriverExtended(driver);"),
+            ("builtin", "GetAndSwitchToRootIFrame", "driver = driver.switchTo().defaultContent(); driverExt = new WebDriverExtended(driver);"),
+
+            ("builtin", "NavigateToUrl", "driver.navigate().to({arg1})"),
+
+            ("builtin", "ClickWithLabel", "ClickWithLabel"),
             (
                 "builtin",
                 "SetTextboxWithLabel",
@@ -78,45 +97,11 @@ import com.nawadata.nfunittestlibrary.WebDriverExtended
 import com.nawadata.nfunittestlibrary.WebElementExtended
 
 WebUI.openBrowser("")
+WebUI.setViewPortSize(1280, 720)
 WebUI.maximizeWindow()
 
 def driver = DriverFactory.getWebDriver()
 def driverExt = new WebDriverExtended(driver)
-
-def NavigateToUrl = { WebDriver localDriver, String url -> localDriver.navigate().to(url) }
-
-def GetElementByText = { WebDriverExtended localDriverExt, String str, String tag -> localDriverExt.getElement().containingString(str, ByOption.Text, tag).untilElementInteractable() }
-def GetElementByTextExact = { WebDriverExtended localDriverExt, String str, String tag -> localDriverExt.getElement().containingStringExact(str, ByOption.Text, tag).untilElementInteractable() }
-def GetElementByString = { WebDriverExtended localDriverExt, String str, ByOption by, String tag -> localDriverExt.getElement().containingString(str, by, tag).untilElementInteractable() }
-def GetElementByStringExact = { WebDriverExtended localDriverExt, String str, ByOption by, String tag -> localDriverExt.getElement().containingStringExact(str, by, tag).untilElementInteractable() }
-
-def ClickElementByText = { WebDriverExtended localDriverExt, String str, String tag -> GetElementByString(localDriverExt, str, ByOption.Text, tag).click() }
-def ClickElementByTextExact = { WebDriverExtended localDriverExt, String str, String tag -> GetElementByStringExact(localDriverExt, str, ByOption.Text, tag).click() }
-def ClickElementByString = { WebDriverExtended localDriverExt, String str, ByOption by, String tag -> GetElementByString(localDriverExt, str, by, tag).click() }
-def ClickElementByStringExact = { WebDriverExtended localDriverExt, String str, ByOption by, String tag -> GetElementByStringExact(localDriverExt, str, by, tag).click() }
-
-def SendTextToElementByText = { WebDriverExtended localDriverExt, String str, String input, String tag -> GetElementByString(localDriverExt, str, ByOption.Text, tag).sendKeys(input) }
-def SendTextToElementByTextExact = { WebDriverExtended localDriverExt, String str, String input, String tag -> GetElementByStringExact(localDriverExt, str, ByOption.Text, tag).sendKeys(input) }
-def SendTextToElementByString = { WebDriverExtended localDriverExt, String str, String input, ByOption by, String tag -> GetElementByString(localDriverExt, str, by, tag).sendKeys(input) }
-def SendTextToElementByStringExact = { WebDriverExtended localDriverExt, String str, String input, ByOption by, String tag -> GetElementByStringExact(localDriverExt, str, by, tag).sendKeys(input) }
-
-def GetInputFromLabel = { WebDriver localDriver, String label -> new WebElementExtended(localDriver).getInputFromLabel(label) }
-def GetIFrameFromLabel = { WebDriver localDriver, String label -> new WebElementExtended(localDriver).getIFrameFromLabel(label) }
-def GetWindowFromLabel = { WebDriver localDriver, String title -> new WebElementExtended(localDriver).getWindowFromTitle(title) }
-def GetGroupFromLabel = { WebDriver localDriver, String title -> new WebElementExtended(localDriver).getGroupFromTitle(title) }
-
-def InputDateByLabelExact = { WebDriver localDriver, String label, String input -> GetInputFromLabel(localDriver, label).shouldBe().date().sendText(input, false) }
-def InputHtmlByLabelExact = { WebDriver localDriver, String label, String input -> GetIFrameFromLabel(localDriver, label).shouldBe().htmlEditor().sendText(input) }
-def InputNumberTextboxByLabelExact = { WebDriver localDriver, String label, String input -> GetInputFromLabel(localDriver, label).shouldBe().numberTextbox().sendText(input) }
-def InputTextboxByLabelExact = { WebDriver localDriver, String label, String input -> GetInputFromLabel(localDriver, label).shouldBe().textbox().sendText(input) }
-def InputDropdownUsingTextByLabelExact = { WebDriver localDriver, String label, String input -> GetInputFromLabel(localDriver, label).shouldBe().dropdown().selectElementFromText(input) }
-def InputDropdownUsingIndexByLabelExact = { WebDriver localDriver, String label, int index -> GetInputFromLabel(localDriver, label).shouldBe().dropdown().selectElementOnIndex(index) }
-def InputRadioUsingTextByLabelExact = { WebDriver localDriver, String label, String input -> GetInputFromLabel(localDriver, label).shouldBe().radio().selectElementFromText(input) }
-def InputRadioUsingIndexByLabelExact = { WebDriver localDriver, String label, int index -> GetInputFromLabel(localDriver, label).shouldBe().radio().selectElementOnIndex(index) }
-
-def GetAndSwitchToAnyIFrame = { WebDriverExtended localDriverExt -> localDriverExt.waitUntilFrameLoads(By.xpath('//iframe')) }
-def GetAndSwitchToParentIFrame = { WebDriver localDriver -> localDriver.switchTo().parentFrame(); }
-def GetAndSwitchToRootIFrame = { WebDriver localDriver -> localDriver.switchTo().defaultContent(); }
 "#;
 
 fn get_pkg_fn_converted(name: &str, pkg: &str) -> String {
@@ -184,6 +169,7 @@ fn pair_str_convert(pairs: Pair<Rule>) -> Result<String, String> {
         Rule::comparable => comparable_convert(pairs), // Ok("bool".to_string()),
         Rule::string => str_convert(pairs),            // Ok("string".to_string()),
         Rule::number => number_convert(pairs),         // Ok("number".to_string()),
+        Rule::byoption_enum => byoption_convert(pairs), // Ok("number".to_string()),
 
         Rule::logic_op => logic_op_convert(pairs), // Ok("bool".to_string()),
         Rule::comp_op => comp_op_convert(pairs),   // Ok("bool".to_string()),
@@ -262,6 +248,15 @@ fn number_convert(pairs: Pair<Rule>) -> Result<String, String> {
     // For now, just return as is.
     // If there's a case where there's a language not following common
     // number, it'll be handled here.
+    Ok(pairs.as_str().to_string())
+}
+
+fn byoption_convert(pairs: Pair<Rule>) -> Result<String, String> {
+    PAIRDEBUG(pairs.clone());
+
+    // For now, just return as is.
+    // If there's a case where there's a language not following common
+    // string grammar, it'll be handled here.
     Ok(pairs.as_str().to_string())
 }
 
@@ -363,9 +358,13 @@ fn fn_convert(pairs: Pair<Rule>) -> Result<String, String> {
             arr
         }
     };
-    // println!("{:?}", converted_args);
 
-    let converted_args: Vec<&str> = converted_args.iter().map(|x| x.as_str()).collect();
+    // Map arg values to [("{arg1}", argvalue), ("{arg2}", argvalue), ..., ("{argN}", argvalue)]
+    let converted_args: HashMap<String, &str> = converted_args
+        .iter()
+        .enumerate()
+        .map(|(i, x)| (format!("arg{}", i + 1).to_string(), x.as_str()))
+        .collect();
 
     let res = match pkg_name {
         Some(pkg) => {
@@ -380,9 +379,18 @@ fn fn_convert(pairs: Pair<Rule>) -> Result<String, String> {
     };
     // Ok(pairs.as_str().to_string());
 
-    let conv_res = format!("{}({})", res, converted_args.join(", "));
+    let formatted_res = if converted_args.len() > 0 {
+        match strfmt(&res, &converted_args) {
+            Ok(fmtstr) => fmtstr,
+            Err(e) => panic!("{}", e),
+        }
+    } else {
+        res
+    };
 
-    Ok(conv_res)
+    // let conv_res = format!("{}({})", res, formatted_args);
+
+    Ok(formatted_res)
 }
 
 fn member_access_convert(pairs: Pair<Rule>) -> Result<String, String> {

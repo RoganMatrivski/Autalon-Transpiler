@@ -17,6 +17,8 @@ pub fn get_pair_return_type(pair: Pair<Rule>) -> Result<String, String> {
         Rule::function_call => get_fn_pair_return_type(pair),
         Rule::member_access => get_member_return_type(pair),
 
+        Rule::byoption_enum => Ok("ByOption".to_string()),
+
         Rule::array_access => todo!(),
 
         Rule::comparable => get_pair_return_type(unwrap_inner(pair)),
