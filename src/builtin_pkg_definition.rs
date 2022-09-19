@@ -8,8 +8,6 @@ pub enum BuiltinPkgFunctions {
     ClickElementByTextExact,
     ClickElementByString,
     ClickElementByStringExact,
-    SendTextToElementByText,
-    SendTextToElementByTextExact,
     SendTextToElementByString,
     SendTextToElementByStringExact,
     GetInputFromLabel,
