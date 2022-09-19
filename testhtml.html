@@ -12,7 +12,7 @@
       // will "boot" the module and make it ready to use. Currently browsers
       // don't support natively imported WebAssembly as an ES module, but
       // eventually the manual initialization won't be required!
-      import init, { greet, transpile_groovy } from './pkg/autalon_transpiler.js';
+      import init, { greet, transpile_groovy, get_fn_metadata } from './pkg_web/autalon_transpiler.js';
 
       async function run() {
         // First up we need to actually load the wasm file, so we use the
@@ -46,18 +46,7 @@
         // And afterwards we can use all the functionality defined in wasm.
         greet();
 
-        let codefile = String.raw`
-#[version=1]
-#[driver_ver=0.1.1]
-
-#:InputTextboxByLabelExact("id", "sysadmin");
-#:InputTextboxByLabelExact("pass", "superuser");
-#:ClickElementByText("Login");
-
-#:InputTextboxByLabelExact("field1", "123");
-#:InputTextboxByLabelExact("field2", "asd");`;
-        let res = transpile_groovy(codefile);
-        console.log(res);
+        console.log(get_fn_metadata());
       }
 
       run();
