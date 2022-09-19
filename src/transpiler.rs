@@ -3,6 +3,7 @@ use pest::iterators::Pair;
 use crate::Rule;
 
 pub mod katalon_prealpha;
+pub mod katalon_prealpha_pkg_def;
 pub mod package_func_map;
 
 pub enum TranspilerOption {

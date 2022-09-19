@@ -3,68 +3,9 @@ use std::collections::HashMap;
 use pest::iterators::Pair;
 use strfmt::strfmt;
 
-use crate::{
-    common_func::unwrap_inner,
-    transpiler::package_func_map::{pkg_fn_map_mapper, PackageFuncMap},
-    Rule,
-};
+use crate::{common_func::unwrap_inner, Rule};
 
-lazy_static! {
-    static ref FN_MAP: Vec<PackageFuncMap> = Vec::from(
-        [
-            ("builtin", "GetElementByText", "driverExt.getElement().containingString({arg1}, ByOption.Text, {arg2}).untilElementInteractable()"),
-            ("builtin", "GetElementByTextExact", "driverExt.getElement().containingStringExact({arg1}, ByOption.Text, {arg2}).untilElementInteractable()"),
-            ("builtin", "GetElementByString", "driverExt.getElement().containingString({arg1}, {arg2}, {arg3}).untilElementInteractable()"),
-            ("builtin", "GetElementByStringExact", "driverExt.getElement().containingStringExact({arg1}, {arg2}, {arg3}).untilElementInteractable()"),
-
-            ("builtin", "ClickElementByText", "driverExt.getElement().containingString({arg1}, ByOption.Text, {arg2}).untilElementInteractable().click()"),
-            ("builtin", "ClickElementByTextExact", "driverExt.getElement().containingStringExact({arg1}, ByOption.Text, {arg2}).untilElementInteractable().click()"),
-            ("builtin", "ClickElementByString", "driverExt.getElement().containingString({arg1}, {arg2}, {arg3}).untilElementInteractable().click()"),
-            ("builtin", "ClickElementByStringExact", "driverExt.getElement().containingStringExact({arg1}, {arg2}, {arg3}).untilElementInteractable().click()"),
-
-            ("builtin", "SendTextToElementByText", "driverExt.getElement().containingString({arg1}, ByOption.Text, {arg3}).untilElementInteractabl.sendKeys({arg2})"),
-            ("builtin", "SendTextToElementByTextExact", "driverExt.getElement().containingStringExact({arg1}, ByOption.Text, {arg3}).untilElementInteractabl.sendKeys({arg2})"),
-            ("builtin", "SendTextToElementByString", "driverExt.getElement().containingString({arg1}, {arg3}, {arg4}).untilElementInteractable().sendKeys({arg2})"),
-            ("builtin", "SendTextToElementByStringExact", "driverExt.getElement().containingStringExact({arg1}, {arg3}, {arg4}).untilElementInteractable().sendKeys({arg2})"),
-
-            ("builtin", "GetInputFromLabel", "new WebElementExtended(driver).getInputFromLabel({arg1})"),
-            ("builtin", "GetIFrameFromLabel", "new WebElementExtended(driver).getIFrameFromLabel({arg1})"),
-            ("builtin", "GetWindowFromLabel", "new WebElementExtended(driver).getWindowFromTitle({arg1})"),
-            ("builtin", "GetGroupFromLabel", "new WebElementExtended(driver).getGroupFromTitle({arg1})"),
-
-            // ("builtin", "InputDateByLabel", "InputDateByLabel"),
-            // ("builtin", "InputDropdownByLabel", "InputDropdownByLabel"),
-            // ("builtin", "InputHtmlByLabel", "InputHtmlByLabel"),
-            // ("builtin", "InputNumberTextboxByLabel", "InputNumberTextboxByLabel"),
-            // ("builtin", "InputRadioByLabel", "InputRadioByLabel"),
-            // ("builtin", "InputTextboxByLabel", "InputTextboxByLabel"),
-
-            ("builtin", "InputDateByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().date().sendText({arg2}, false)"),
-            ("builtin", "InputHtmlByLabelExact", "new WebElementExtended(driver).getIFrameFromLabel({arg1}).shouldBe().htmlEditor().sendText({arg2})"),
-            ("builtin", "InputNumberTextboxByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().numberTextbox().sendText({arg2})"),
-            ("builtin", "InputTextboxByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().textbox().sendText({arg2})"),
-            ("builtin", "InputDropdownUsingTextByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().dropdown().selectElementFromText({arg2})"),
-            ("builtin", "InputDropdownUsingIndexByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().dropdown().selectElementOnIndex({arg2})"),
-            ("builtin", "InputRadioUsingTextByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().radio().selectElementFromText({arg2})"),
-            ("builtin", "InputRadioUsingIndexByLabelExact", "new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().radio().selectElementOnIndex({arg2})"),
-
-            ("builtin", "GetAndSwitchToAnyIFrame", "driver = driverExt.waitUntilFrameLoads(By.xpath('//iframe')); driverExt = new WebDriverExtended(driver);"),
-            ("builtin", "GetAndSwitchToParentIFrame", "driver = driver.switchTo().parentFrame(); driverExt = new WebDriverExtended(driver);"),
-            ("builtin", "GetAndSwitchToRootIFrame", "driver = driver.switchTo().defaultContent(); driverExt = new WebDriverExtended(driver);"),
-
-            ("builtin", "NavigateToUrl", "driver.navigate().to({arg1})"),
-
-            ("builtin", "ClickWithLabel", "ClickWithLabel"),
-            (
-                "builtin",
-                "SetTextboxWithLabel",
-                "SetTextboxWithLabel_MAPPED"
-            ),
-            ("tools", "RandomString", "RandomString_MAPPED"),
-        ]
-        .map(pkg_fn_map_mapper)
-    );
-}
+use super::katalon_prealpha_pkg_def::get_default_fn_template;
 
 const PREFIX_PROG: &str = r#"
 import static com.kms.katalon.core.checkpoint.CheckpointFactory.findCheckpoint
@@ -103,24 +44,6 @@ WebUI.maximizeWindow()
 def driver = DriverFactory.getWebDriver()
 def driverExt = new WebDriverExtended(driver)
 "#;
-
-fn get_pkg_fn_converted(name: &str, pkg: &str) -> String {
-    // TODO: Remove hardcoded package alias switching
-    let pkg = if pkg == "#" { "builtin" } else { pkg };
-
-    let fn_list: Vec<&PackageFuncMap> = FN_MAP.iter().filter(|x| x.package_name == pkg).collect();
-
-    if fn_list.len() == 0 {
-        panic!("Cannot find package \"{}\"", pkg);
-    };
-
-    let fn_metadata = match fn_list.iter().find(|x| x.func_name == name) {
-        Some(args) => args,
-        None => panic!("Cannot find function \"{}\" in package \"{}\"", name, pkg),
-    };
-
-    fn_metadata.convert.clone()
-}
 
 pub fn program_handler(pair: Vec<Pair<Rule>>) -> Result<String, String> {
     let res: Vec<String> = pair
@@ -372,7 +295,7 @@ fn fn_convert(pairs: Pair<Rule>) -> Result<String, String> {
 
             match val_name {
                 Some(_) => unimplemented!(), // No builtin value unfortunately for now, so skipping it.
-                None => get_pkg_fn_converted(fn_name.as_str(), pkg.as_str()),
+                None => get_default_fn_template(fn_name.as_str(), pkg.as_str()),
             }
         }
         None => unimplemented!(), // Fn is local, none of this one for now

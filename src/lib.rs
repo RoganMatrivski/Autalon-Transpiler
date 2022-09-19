@@ -4,6 +4,9 @@ extern crate pest_derive;
 #[macro_use]
 extern crate lazy_static;
 
+use builtin_pkg_definition::BuiltinPkgFunctions;
+use strum::IntoEnumIterator;
+
 use pest::{iterators::Pair, Parser};
 
 #[derive(Parser)]
@@ -11,6 +14,7 @@ use pest::{iterators::Pair, Parser};
 struct AutalonParser;
 
 // mod builtin_pkg_list;
+mod builtin_pkg_definition;
 mod checker;
 mod common_func;
 mod transpiler;
@@ -73,4 +77,13 @@ pub fn transpile_groovy(code: &str) -> String {
     }
 
     transpiler::program_handler(checked_pair).unwrap()
+}
+
+#[wasm_bindgen]
+pub fn get_fn_metadata() -> String {
+    let metadata_list: Vec<builtin_pkg_definition::FunctionMetadata> = BuiltinPkgFunctions::iter()
+        .map(|x| builtin_pkg_definition::get_fn_metadata(&x))
+        .collect();
+
+    serde_json::to_string_pretty(&metadata_list).expect("Cannot stringify metadata_list")
 }

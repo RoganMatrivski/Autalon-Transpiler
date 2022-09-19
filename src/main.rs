@@ -11,6 +11,8 @@ use pest::{iterators::Pair, Parser};
 #[derive(Parser)]
 #[grammar = "parser/expr.pest"]
 struct AutalonParser;
+
+mod builtin_pkg_definition;
 mod checker;
 mod common_func;
 mod transpiler;
