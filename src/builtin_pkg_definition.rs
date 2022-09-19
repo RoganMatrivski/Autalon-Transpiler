@@ -147,6 +147,12 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                     default_value: ostr!(""),
                 },
                 FunctionArgsMetadata {
+                    display_name: ostr!("Input"),
+                    description: ostr!("String to input"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+                FunctionArgsMetadata {
                     display_name: ostr!("By Option"),
                     description: ostr!("The attribute to match with the string"),
                     arg_type: ostr!("ByOption"),
@@ -397,6 +403,27 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             display_name: ostr!("Get And Switch To Root IFrame"),
             description: ostr!("Switch to Root (top most) IFrame"),
             args: vec![],
+            return_type: ostr!("void"),
+        },
+
+        BuiltinPkgFunctions::SetWindowDimension => FunctionMetadata {
+            name: ostr!("SetWindowDimension"),
+            display_name: ostr!("Set Window Dimension"),
+            description: ostr!("Set window mode to windowed, and resize window"),
+            args: vec![
+                FunctionArgsMetadata {
+                    display_name: ostr!("Width"),
+                    description: ostr!("Width of the window"),
+                    arg_type: ostr!("number"),
+                    default_value: ostr!("800"),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Height"),
+                    description: ostr!("Height of the window"),
+                    arg_type: ostr!("number"),
+                    default_value: ostr!("600"),
+                },
+            ],
             return_type: ostr!("void"),
         },
     }

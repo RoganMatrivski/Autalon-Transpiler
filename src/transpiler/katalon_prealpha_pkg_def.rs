@@ -62,6 +62,9 @@ fn get_katalon_default_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> String {
         BuiltinPkgFunctions::GetAndSwitchToRootIFrame => ostr!(
             r#"driver = driver.switchTo().defaultContent(); driverExt = new WebDriverExtended(driver)"#
         ),
+        BuiltinPkgFunctions::SetWindowDimension => ostr!(
+            r#"driverExt.setWindowDimension({arg1}, {arg2})"#
+        )
         // fn_enum => unimplemented!(
         //     "Function {} from default package is currently unimplemented.",
         //     fn_enum
