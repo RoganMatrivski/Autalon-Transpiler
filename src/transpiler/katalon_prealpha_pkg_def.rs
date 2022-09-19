@@ -8,35 +8,14 @@ use crate::{
 fn get_katalon_default_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> String {
     match builtin_fn {
         BuiltinPkgFunctions::NavigateToUrl => ostr!(r#"driver.navigate().to({arg1})"#),
-        BuiltinPkgFunctions::GetElementByText => ostr!(
-            r#"driverExt.getElement().containingString({arg1}, ByOption.Text, {arg2}).untilElementInteractable()"#
-        ),
-        BuiltinPkgFunctions::GetElementByTextExact => ostr!(
-            r#"driverExt.getElement().containingStringExact({arg1}, ByOption.Text, {arg2}).untilElementInteractable()"#
-        ),
         BuiltinPkgFunctions::GetElementByString => ostr!(
-            r#"driverExt.getElement().containingString({arg1}, {arg2}, {arg3}).untilElementInteractable()"#
-        ),
-        BuiltinPkgFunctions::GetElementByStringExact => ostr!(
-            r#"driverExt.getElement().containingStringExact({arg1}, {arg2}, {arg3}).untilElementInteractable()"#
-        ),
-        BuiltinPkgFunctions::ClickElementByText => ostr!(
-            r#"driverExt.getElement().containingString({arg1}, ByOption.Text, {arg2}).untilElementInteractable().click()"#
-        ),
-        BuiltinPkgFunctions::ClickElementByTextExact => ostr!(
-            r#"driverExt.getElement().containingStringExact({arg1}, ByOption.Text, {arg2}).untilElementInteractable().click()"#
+            r#"driverExt.getElement().byString({arg1}, {arg2}, {arg3}, {arg4}).untilElementInteractable()"#
         ),
         BuiltinPkgFunctions::ClickElementByString => ostr!(
-            r#"driverExt.getElement().containingString({arg1}, {arg2}, {arg3}).untilElementInteractable().click()"#
-        ),
-        BuiltinPkgFunctions::ClickElementByStringExact => ostr!(
-            r#"driverExt.getElement().containingStringExact({arg1}, {arg2}, {arg3}).untilElementInteractable().click()"#
+            r#"driverExt.getElement().byString({arg1}, {arg2}, {arg3}, {arg4}).untilElementInteractable().click()"#
         ),
         BuiltinPkgFunctions::SendTextToElementByString => ostr!(
-            r#"driverExt.getElement().containingString({arg1}, {arg3}, {arg4}).untilElementInteractable().sendKeys({arg2})"#
-        ),
-        BuiltinPkgFunctions::SendTextToElementByStringExact => ostr!(
-            r#"driverExt.getElement().containingStringExact({arg1}, {arg3}, {arg4}).untilElementInteractable().sendKeys({arg2})"#
+            r#"driverExt.getElement().byString({arg1}, {arg3}, {arg4}, {arg5}).untilElementInteractable().sendKeys({arg2})"#
         ),
         BuiltinPkgFunctions::GetInputFromLabel => {
             ostr!(r#"new WebElementExtended(driver).getInputFromLabel({arg1})"#)

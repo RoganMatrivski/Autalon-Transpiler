@@ -7,23 +7,16 @@ use crate::ostr;
 enum ArgType {
     String,
     Number,
-    Boolean,
+    Bool,
     ByOption,
 }
 
 #[derive(PartialEq, EnumString, EnumIter, Display)]
 pub enum BuiltinPkgFunctions {
     NavigateToUrl,
-    GetElementByText,
-    GetElementByTextExact,
     GetElementByString,
-    GetElementByStringExact,
-    ClickElementByText,
-    ClickElementByTextExact,
     ClickElementByString,
-    ClickElementByStringExact,
     SendTextToElementByString,
-    SendTextToElementByStringExact,
     GetInputFromLabel,
     GetIFrameFromLabel,
     GetWindowFromLabel,
@@ -77,46 +70,6 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             return_type: ostr!("void"),
         },
 
-        BuiltinPkgFunctions::GetElementByText => FunctionMetadata {
-            name: ostr!("GetElementByText"),
-            display_name: ostr!("Get Element By Text"),
-            description: ostr!("Get element by text specified"),
-            args: vec![
-                FunctionArgsMetadata {
-                    display_name: ostr!("Text"),
-                    description: ostr!("Text to find"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!(""),
-                },
-                FunctionArgsMetadata {
-                    display_name: ostr!("Tag"),
-                    description: ostr!("Tag to match for the element"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!("*"),
-                },
-            ],
-            return_type: ostr!("void"),
-        },
-        BuiltinPkgFunctions::GetElementByTextExact => FunctionMetadata {
-            name: ostr!("GetElementByTextExact"),
-            display_name: ostr!("Get Element By Exact Text"),
-            description: ostr!("Get element by exact text specified"),
-            args: vec![
-                FunctionArgsMetadata {
-                    display_name: ostr!("Text"),
-                    description: ostr!("Text to find"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!(""),
-                },
-                FunctionArgsMetadata {
-                    display_name: ostr!("Tag"),
-                    description: ostr!("Tag to match for the element"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!("*"),
-                },
-            ],
-            return_type: ostr!("void"),
-        },
         BuiltinPkgFunctions::GetElementByString => FunctionMetadata {
             name: ostr!("GetElementByString"),
             display_name: ostr!("Get Element By String"),
@@ -129,24 +82,10 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                     default_value: ostr!(""),
                 },
                 FunctionArgsMetadata {
-                    display_name: ostr!("Tag"),
-                    description: ostr!("Tag to match for the element"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!("*"),
-                },
-            ],
-            return_type: ostr!("void"),
-        },
-        BuiltinPkgFunctions::GetElementByStringExact => FunctionMetadata {
-            name: ostr!("GetElementByStringExact"),
-            display_name: ostr!("Get Element By Exact String"),
-            description: ostr!("Get element by exact string specified"),
-            args: vec![
-                FunctionArgsMetadata {
-                    display_name: ostr!("String"),
-                    description: ostr!("String to find"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!(""),
+                    display_name: ostr!("By Option"),
+                    description: ostr!("The attribute to match with the string"),
+                    arg_type: ostr!("ByOption"),
+                    default_value: ostr!("ByOption.Text"),
                 },
                 FunctionArgsMetadata {
                     display_name: ostr!("Tag"),
@@ -154,46 +93,11 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                     arg_type: ostr!("string"),
                     default_value: ostr!("*"),
                 },
-            ],
-            return_type: ostr!("void"),
-        },
-
-        BuiltinPkgFunctions::ClickElementByText => FunctionMetadata {
-            name: ostr!("ClickElementByText"),
-            display_name: ostr!("Click Element By Text"),
-            description: ostr!("Click element by text specified"),
-            args: vec![
                 FunctionArgsMetadata {
-                    display_name: ostr!("Text"),
-                    description: ostr!("Text to find"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!(""),
-                },
-                FunctionArgsMetadata {
-                    display_name: ostr!("Tag"),
-                    description: ostr!("Tag to match for the element"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!("*"),
-                },
-            ],
-            return_type: ostr!("void"),
-        },
-        BuiltinPkgFunctions::ClickElementByTextExact => FunctionMetadata {
-            name: ostr!("ClickElementByTextExact"),
-            display_name: ostr!("Click Element By Exact Text"),
-            description: ostr!("Click element by exact text specified"),
-            args: vec![
-                FunctionArgsMetadata {
-                    display_name: ostr!("Text"),
-                    description: ostr!("Text to find"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!(""),
-                },
-                FunctionArgsMetadata {
-                    display_name: ostr!("Tag"),
-                    description: ostr!("Tag to match for the element"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!("*"),
+                    display_name: ostr!("Exact Match"),
+                    description: ostr!("Match the whole string"),
+                    arg_type: ostr!("bool"),
+                    default_value: ostr!("ByOption.Text"),
                 },
             ],
             return_type: ostr!("void"),
@@ -210,30 +114,22 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                     default_value: ostr!(""),
                 },
                 FunctionArgsMetadata {
-                    display_name: ostr!("Tag"),
-                    description: ostr!("Tag to match for the element"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!("*"),
-                },
-            ],
-            return_type: ostr!("void"),
-        },
-        BuiltinPkgFunctions::ClickElementByStringExact => FunctionMetadata {
-            name: ostr!("ClickElementByStringExact"),
-            display_name: ostr!("Click Element By Exact String"),
-            description: ostr!("Click element by exact string specified"),
-            args: vec![
-                FunctionArgsMetadata {
-                    display_name: ostr!("String"),
-                    description: ostr!("String to find"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!(""),
+                    display_name: ostr!("By Option"),
+                    description: ostr!("The attribute to match with the string"),
+                    arg_type: ostr!("ByOption"),
+                    default_value: ostr!("ByOption.Text"),
                 },
                 FunctionArgsMetadata {
                     display_name: ostr!("Tag"),
                     description: ostr!("Tag to match for the element"),
                     arg_type: ostr!("string"),
                     default_value: ostr!("*"),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Exact Match"),
+                    description: ostr!("Match the whole string"),
+                    arg_type: ostr!("bool"),
+                    default_value: ostr!("ByOption.Text"),
                 },
             ],
             return_type: ostr!("void"),
@@ -251,30 +147,22 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                     default_value: ostr!(""),
                 },
                 FunctionArgsMetadata {
-                    display_name: ostr!("Tag"),
-                    description: ostr!("Tag to match for the element"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!("*"),
-                },
-            ],
-            return_type: ostr!("void"),
-        },
-        BuiltinPkgFunctions::SendTextToElementByStringExact => FunctionMetadata {
-            name: ostr!("SendTextToElementByStringExact"),
-            display_name: ostr!("Send text to Element By Exact String"),
-            description: ostr!("Send text to element by exact string specified"),
-            args: vec![
-                FunctionArgsMetadata {
-                    display_name: ostr!("String"),
-                    description: ostr!("String to find"),
-                    arg_type: ostr!("string"),
-                    default_value: ostr!(""),
+                    display_name: ostr!("By Option"),
+                    description: ostr!("The attribute to match with the string"),
+                    arg_type: ostr!("ByOption"),
+                    default_value: ostr!("ByOption.Text"),
                 },
                 FunctionArgsMetadata {
                     display_name: ostr!("Tag"),
                     description: ostr!("Tag to match for the element"),
                     arg_type: ostr!("string"),
                     default_value: ostr!("*"),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Exact Match"),
+                    description: ostr!("Match the whole string"),
+                    arg_type: ostr!("bool"),
+                    default_value: ostr!("ByOption.Text"),
                 },
             ],
             return_type: ostr!("void"),
