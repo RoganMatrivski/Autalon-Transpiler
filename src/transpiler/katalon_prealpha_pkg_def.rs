@@ -17,41 +17,41 @@ fn get_katalon_default_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> String {
         BuiltinPkgFunctions::SendTextToElementByString => ostr!(
             r#"driverExt.getElement().byString({arg1}, {arg3}, {arg4}, {arg5}).untilElementInteractable().sendKeys({arg2})"#
         ),
-        BuiltinPkgFunctions::GetInputFromLabel => {
-            ostr!(r#"new WebElementExtended(driver).getInputFromLabel({arg1})"#)
+        BuiltinPkgFunctions::ExtUIGetInputFromLabel => {
+            ostr!(r#"new ExtUIGetter(driver).getInputFromLabel({arg1})"#)
         }
-        BuiltinPkgFunctions::GetIFrameFromLabel => {
-            ostr!(r#"new WebElementExtended(driver).getIFrameFromLabel({arg1})"#)
+        BuiltinPkgFunctions::ExtUIGetIFrameFromLabel => {
+            ostr!(r#"new ExtUIGetter(driver).getIFrameFromLabel({arg1})"#)
         }
-        BuiltinPkgFunctions::GetWindowFromLabel => {
-            ostr!(r#"new WebElementExtended(driver).getWindowFromTitle({arg1})"#)
+        BuiltinPkgFunctions::ExtUIGetWindowFromLabel => {
+            ostr!(r#"new ExtUIGetter(driver).getWindowFromTitle({arg1})"#)
         }
-        BuiltinPkgFunctions::GetGroupFromLabel => {
-            ostr!(r#"new WebElementExtended(driver).getGroupFromTitle({arg1})"#)
+        BuiltinPkgFunctions::ExtUIGetGroupFromLabel => {
+            ostr!(r#"new ExtUIGetter(driver).getGroupFromTitle({arg1})"#)
         }
-        BuiltinPkgFunctions::InputDateByLabelExact => ostr!(
-            r#"new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().date().sendText({arg2}, false)"#
+        BuiltinPkgFunctions::ExtUIInputDateByLabelExact => ostr!(
+            r#"new ExtUIGetter(driver).getInputFromLabel({arg1}).shouldBe().date().sendText({arg2}, false)"#
         ),
-        BuiltinPkgFunctions::InputHtmlByLabelExact => ostr!(
-            r#"new WebElementExtended(driver).getIFrameFromLabel({arg1}).shouldBe().htmlEditor().sendText({arg2})"#
+        BuiltinPkgFunctions::ExtUIInputHtmlByLabelExact => ostr!(
+            r#"new ExtUIGetter(driver).getIFrameFromLabel({arg1}).shouldBe().htmlEditor().sendText({arg2})"#
         ),
-        BuiltinPkgFunctions::InputNumberTextboxByLabelExact => ostr!(
-            r#"new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().numberTextbox().sendText({arg2})"#
+        BuiltinPkgFunctions::ExtUIInputNumberTextboxByLabelExact => ostr!(
+            r#"new ExtUIGetter(driver).getInputFromLabel({arg1}).shouldBe().numberTextbox().sendText({arg2})"#
         ),
-        BuiltinPkgFunctions::InputTextboxByLabelExact => ostr!(
-            r#"new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().textbox().sendText({arg2})"#
+        BuiltinPkgFunctions::ExtUIInputTextboxByLabelExact => ostr!(
+            r#"new ExtUIGetter(driver).getInputFromLabel({arg1}).shouldBe().textbox().sendText({arg2})"#
         ),
-        BuiltinPkgFunctions::InputDropdownUsingTextByLabelExact => ostr!(
-            r#"new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().dropdown().selectElementFromText({arg2})"#
+        BuiltinPkgFunctions::ExtUIInputDropdownUsingTextByLabelExact => ostr!(
+            r#"new ExtUIGetter(driver).getInputFromLabel({arg1}).shouldBe().dropdown().selectElementFromText({arg2})"#
         ),
-        BuiltinPkgFunctions::InputDropdownUsingIndexByLabelExact => ostr!(
-            r#"new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().dropdown().selectElementOnIndex({arg2})"#
+        BuiltinPkgFunctions::ExtUIInputDropdownUsingIndexByLabelExact => ostr!(
+            r#"new ExtUIGetter(driver).getInputFromLabel({arg1}).shouldBe().dropdown().selectElementOnIndex({arg2})"#
         ),
-        BuiltinPkgFunctions::InputRadioUsingTextByLabelExact => ostr!(
-            r#"new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().radio().selectElementFromText({arg2})"#
+        BuiltinPkgFunctions::ExtUIInputRadioUsingTextByLabelExact => ostr!(
+            r#"new ExtUIGetter(driver).getInputFromLabel({arg1}).shouldBe().radio().selectElementFromText({arg2})"#
         ),
-        BuiltinPkgFunctions::InputRadioUsingIndexByLabelExact => ostr!(
-            r#"new WebElementExtended(driver).getInputFromLabel({arg1}).shouldBe().radio().selectElementOnIndex({arg2})"#
+        BuiltinPkgFunctions::ExtUIInputRadioUsingIndexByLabelExact => ostr!(
+            r#"new ExtUIGetter(driver).getInputFromLabel({arg1}).shouldBe().radio().selectElementOnIndex({arg2})"#
         ),
         BuiltinPkgFunctions::GetAndSwitchToAnyIFrame => ostr!(
             r#"driver = driverExt.waitUntilFrameLoads(By.xpath('//iframe')); driverExt = new WebDriverExtended(driver)"#
@@ -62,9 +62,12 @@ fn get_katalon_default_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> String {
         BuiltinPkgFunctions::GetAndSwitchToRootIFrame => ostr!(
             r#"driver = driver.switchTo().defaultContent(); driverExt = new WebDriverExtended(driver)"#
         ),
-        BuiltinPkgFunctions::SetWindowDimension => ostr!(
-            r#"driverExt.setWindowDimension({arg1}, {arg2})"#
-        )
+        BuiltinPkgFunctions::SetWindowDimension => {
+            ostr!(r#"driverExt.setWindowDimension({arg1}, {arg2})"#)
+        }
+        BuiltinPkgFunctions::MUIInputTextboxByLabelExact => {
+            ostr!(r#"new ReactMUIGetter(driver).getTextboxFromLabel({arg1}).sendText({arg2})"#)
+        }
         // fn_enum => unimplemented!(
         //     "Function {} from default package is currently unimplemented.",
         //     fn_enum
