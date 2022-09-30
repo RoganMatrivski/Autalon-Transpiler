@@ -36,6 +36,8 @@ import com.nawadata.nfunittestlibrary.Enums.*
 import com.nawadata.nfunittestlibrary.Enums.ByOption
 import com.nawadata.nfunittestlibrary.WebDriverExtended
 import com.nawadata.nfunittestlibrary.WebElementExtended
+import com.nawadata.nfunittestlibrary.ExtUIGetter
+import com.nawadata.nfunittestlibrary.ReactMUIGetter
 
 WebUI.openBrowser("")
 WebUI.setViewPortSize(1280, 720)
@@ -92,6 +94,7 @@ fn pair_str_convert(pairs: Pair<Rule>) -> Result<String, String> {
         Rule::comparable => comparable_convert(pairs), // Ok("bool".to_string()),
         Rule::string => str_convert(pairs),            // Ok("string".to_string()),
         Rule::number => number_convert(pairs),         // Ok("number".to_string()),
+        Rule::bool => bool_convert(pairs),             // Ok("bool".to_string()),
         Rule::byoption_enum => byoption_convert(pairs), // Ok("number".to_string()),
 
         Rule::logic_op => logic_op_convert(pairs), // Ok("bool".to_string()),
@@ -171,6 +174,15 @@ fn number_convert(pairs: Pair<Rule>) -> Result<String, String> {
     // For now, just return as is.
     // If there's a case where there's a language not following common
     // number, it'll be handled here.
+    Ok(pairs.as_str().to_string())
+}
+
+fn bool_convert(pairs: Pair<Rule>) -> Result<String, String> {
+    PAIRDEBUG(pairs.clone());
+
+    // For now, just return as is.
+    // If there's a case where there's a language not following common
+    // bool, it'll be handled here.
     Ok(pairs.as_str().to_string())
 }
 
