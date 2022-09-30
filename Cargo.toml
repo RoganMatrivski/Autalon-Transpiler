@@ -1,6 +1,6 @@
 [package]
 name = "autalon-transpiler"
-version = "0.1.4"
+version = "0.1.8"
 authors = ["Robin Mauritz <robinmauritzrm@gmail.com>"]
 edition = "2021"
 
