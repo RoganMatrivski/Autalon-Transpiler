@@ -16,7 +16,7 @@ var_declaration = @{ "var " ~ var_assignment }
 var_assignment = !{ identifier ~ "=" ~ expr }
 
 expr = { basic_expr ~ ( ( add_op | sub_op | div_op | mul_op | mod_op | pow_op ) ~ basic_expr )* }
-basic_expr = { logic_op | comp_op | string | number | array_access | function_call | byoption_enum | member_access }
+basic_expr = { logic_op | comp_op | string | number | bool | array_access | function_call | byoption_enum | member_access }
 
 byoption_enum = @{ "ByOption." ~ ident_char+ }
 
@@ -25,7 +25,9 @@ escape_block = { "unparsed" ~ "###{" ~ (!("}###") ~ ANY)* ~ "}###" }
 logic_op = { ( comp_op | comparable ) ~ ( and_op | or_op ) ~ ( comp_op | comparable  ) }
 
 comp_op = { comparable ~ ( eq_op | ne_op | le_op | lt_op | ge_op | gt_op  ) ~ comparable }
-comparable = { string | number | member_access }
+comparable = { string | number | bool | member_access }
+
+bool = { "true" | "false" }
 
 array_access = { member_access ~ "[" ~ indexable_expr ~ "]" }
 indexable_expr = { number | function_call | member_access }

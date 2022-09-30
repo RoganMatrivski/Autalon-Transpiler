@@ -118,7 +118,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                     display_name: ostr!("Exact Match"),
                     description: ostr!("Match the whole string"),
                     arg_type: ostr!("bool"),
-                    default_value: ostr!("ByOption.Text"),
+                    default_value: ostr!("true"),
                 },
             ],
             return_type: ostr!("void"),
@@ -151,7 +151,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                     display_name: ostr!("Exact Match"),
                     description: ostr!("Match the whole string"),
                     arg_type: ostr!("bool"),
-                    default_value: ostr!("ByOption.Text"),
+                    default_value: ostr!("true"),
                 },
             ],
             return_type: ostr!("void"),
@@ -191,7 +191,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                     display_name: ostr!("Exact Match"),
                     description: ostr!("Match the whole string"),
                     arg_type: ostr!("bool"),
-                    default_value: ostr!("ByOption.Text"),
+                    default_value: ostr!("true"),
                 },
             ],
             return_type: ostr!("void"),
@@ -199,7 +199,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
         },
 
         BuiltinPkgFunctions::ExtUIGetInputFromLabel => FunctionMetadata {
-            name: ostr!("GetInputFromLabel"),
+            name: ostr!("ExtUIGetInputFromLabel"),
             display_name: ostr!("Get Input From Label"),
             description: ostr!("Get input element from label text"),
             args: vec![FunctionArgsMetadata {
@@ -212,7 +212,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Any,
         },
         BuiltinPkgFunctions::ExtUIGetIFrameFromLabel => FunctionMetadata {
-            name: ostr!("GetIFrameFromLabel"),
+            name: ostr!("ExtUIGetIFrameFromLabel"),
             display_name: ostr!("Get IFrame From Label"),
             description: ostr!("Get IFrame element from label text"),
             args: vec![FunctionArgsMetadata {
@@ -225,7 +225,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Ext,
         },
         BuiltinPkgFunctions::ExtUIGetWindowFromLabel => FunctionMetadata {
-            name: ostr!("GetWindowFromLabel"),
+            name: ostr!("ExtUIGetWindowFromLabel"),
             display_name: ostr!("Get Window From Label"),
             description: ostr!("Get window element from title text"),
             args: vec![FunctionArgsMetadata {
@@ -238,7 +238,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Ext,
         },
         BuiltinPkgFunctions::ExtUIGetGroupFromLabel => FunctionMetadata {
-            name: ostr!("GetGroupFromLabel"),
+            name: ostr!("GetGroupFromLabelExtUI"),
             display_name: ostr!("Get Group From Label"),
             description: ostr!("Get group element from label text"),
             args: vec![FunctionArgsMetadata {
@@ -252,7 +252,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
         },
 
         BuiltinPkgFunctions::ExtUIInputDateByLabelExact => FunctionMetadata {
-            name: ostr!("InputDateByLabelExact"),
+            name: ostr!("ExtUIInputDateByLabelExact"),
             display_name: ostr!("Input Date By Label Exact"),
             description: ostr!("Input date on form by label form"),
             args: vec![
@@ -273,7 +273,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Ext,
         },
         BuiltinPkgFunctions::ExtUIInputHtmlByLabelExact => FunctionMetadata {
-            name: ostr!("InputHtmlByLabelExact"),
+            name: ostr!("ExtUIInputHtmlByLabelExact"),
             display_name: ostr!("Input Html By Label Exact"),
             description: ostr!("Input html on form by label form"),
             args: vec![
@@ -294,7 +294,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Ext,
         },
         BuiltinPkgFunctions::ExtUIInputNumberTextboxByLabelExact => FunctionMetadata {
-            name: ostr!("InputNumberTextboxByLabelExact"),
+            name: ostr!("ExtUIInputNumberTextboxByLabelExact"),
             display_name: ostr!("Input Number Textbox By Label Exact"),
             description: ostr!("Input number textbox on form by label form"),
             args: vec![
@@ -315,7 +315,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Ext,
         },
         BuiltinPkgFunctions::ExtUIInputTextboxByLabelExact => FunctionMetadata {
-            name: ostr!("InputTextboxByLabelExact"),
+            name: ostr!("ExtUIInputTextboxByLabelExact"),
             display_name: ostr!("Input Textbox By Label Exact"),
             description: ostr!("Input textbox on form by label form"),
             args: vec![
@@ -336,7 +336,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Ext,
         },
         BuiltinPkgFunctions::ExtUIInputDropdownUsingTextByLabelExact => FunctionMetadata {
-            name: ostr!("InputDropdownUsingTextByLabelExact"),
+            name: ostr!("ExtUIInputDropdownUsingTextByLabelExact"),
             display_name: ostr!("Input Dropdown Using Text By Label Exact"),
             description: ostr!("Input dropdown using text on form by label form"),
             args: vec![
@@ -357,7 +357,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Ext,
         },
         BuiltinPkgFunctions::ExtUIInputDropdownUsingIndexByLabelExact => FunctionMetadata {
-            name: ostr!("InputDropdownUsingIndexByLabelExact"),
+            name: ostr!("ExtUIInputDropdownUsingIndexByLabelExact"),
             display_name: ostr!("Input Dropdown Using Index By Label Exact"),
             description: ostr!("Input dropdown using index on form by label form"),
             args: vec![
@@ -378,7 +378,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Ext,
         },
         BuiltinPkgFunctions::ExtUIInputRadioUsingTextByLabelExact => FunctionMetadata {
-            name: ostr!("InputRadioUsingTextByLabelExact"),
+            name: ostr!("ExtUIInputRadioUsingTextByLabelExact"),
             display_name: ostr!("Input Radio Using Text By Label Exact"),
             description: ostr!("Input radio using text on form by label form"),
             args: vec![
@@ -399,7 +399,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Ext,
         },
         BuiltinPkgFunctions::ExtUIInputRadioUsingIndexByLabelExact => FunctionMetadata {
-            name: ostr!("InputRadioUsingIndexByLabelExact"),
+            name: ostr!("ExtUIInputRadioUsingIndexByLabelExact"),
             display_name: ostr!("Input Radio Using Index By Label Exact"),
             description: ostr!("Input radio using index on form by label form"),
             args: vec![
@@ -467,7 +467,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Any,
         },
         BuiltinPkgFunctions::MUIInputTextboxByLabelExact => FunctionMetadata {
-            name: ostr!("InputTextboxByLabelExact"),
+            name: ostr!("MUIInputTextboxByLabelExact"),
             display_name: ostr!("Input Textbox By Label Exact"),
             description: ostr!("Input textbox on form by label form"),
             args: vec![

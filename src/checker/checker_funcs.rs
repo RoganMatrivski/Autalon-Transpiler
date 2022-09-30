@@ -12,6 +12,8 @@ pub fn get_pair_return_type(pair: Pair<Rule>) -> Result<String, String> {
     match pair.as_rule() {
         Rule::string => Ok("string".to_string()),
         Rule::number => Ok("number".to_string()),
+        Rule::bool => Ok("bool".to_string()),
+
         Rule::logic_op => get_logic_comp_return_type(pair),
         Rule::comp_op => get_logic_comp_return_type(pair),
         Rule::function_call => get_fn_pair_return_type(pair),
@@ -135,6 +137,8 @@ fn get_member_return_type(pair: Pair<Rule>) -> Result<String, String> {
         panic!("Pair is not a member access")
     }
 
+    PAIRDEBUG(pair.clone());
+
     let inner_pair = pair.into_inner();
 
     let mut fn_tokens: Vec<Pair<Rule>> = vec![];
@@ -209,4 +213,13 @@ pub fn check_logic_comp_type(lhs: &String, rhs: &String) -> Result<(), String> {
     } else {
         Err("Type mismatch!".to_string())
     }
+}
+
+// TODO: Individualize this fn
+#[allow(non_snake_case)]
+fn PAIRDEBUG(pairs: Pair<Rule>) {
+    println!("Rule:    {:?}", pairs.as_rule());
+    println!("Span:    {:?}", pairs.as_span());
+    println!("Text:    {}", pairs.as_str());
+    println!();
 }
