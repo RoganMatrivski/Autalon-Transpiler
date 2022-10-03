@@ -20,7 +20,7 @@ jobs:
         with:
           toolchain: stable
           target: "wasm32-unknown-unknown"
-            profile: minimal
+          profile: minimal
           override: true
       - name: Download wasm-pack
         uses: jetli/wasm-pack-action@v0.3.0
