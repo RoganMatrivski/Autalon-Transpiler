@@ -20,91 +20,57 @@ jobs:
         with:
           toolchain: stable
           override: true
-      - name: Add cargo-generate
-        uses: actions-rs/install@v0.1
-        with:
-          crate: cargo-generate
-          version: latest
-          use-tool-cache: true
-      - name: Clone Repo to Fix Broken Cargo.toml
-        run: cargo generate --git . --name testing
-      - name: Move Cargo.toml and Change Directory
-        run: mv Cargo.toml Cargo.toml.tmpl && cd testing
       - name: Download wasm-pack
         uses: jetli/wasm-pack-action@v0.3.0
       - run: wasm-pack build
       - run: wasm-pack test --chrome --firefox --headless
 
-  # CheckBeta:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix: 
-  #       runconfig: [
-  #         'check',
-  #         'check --target wasm32-unknown-unknown',
-  #         'check                                 --no-default-features',
-  #         'check --target wasm32-unknown-unknown --no-default-features',
-  #         'check                                 --no-default-features --features console_error_panic_hook',
-  #         'check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook',
-  #       ]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Install latest beta
-  #       uses: actions-rs/toolchain@v1
-  #       with:
-  #           toolchain: beta
-  #           override: true
-  #     - name: Add cargo-generate
-  #       uses: actions-rs/install@v0.1
-  #       with:
-  #         crate: cargo-generate
-  #         version: latest
-  #         use-tool-cache: true
-  #     - name: Clone Repo to Fix Broken Cargo.toml
-  #       uses: actions-rs/cargo@v1
-  #       with:
-  #         command: generate --git . --name testing
-  #     - name: Move Cargo.toml and Change Directory
-  #       run: mv Cargo.toml Cargo.toml.tmpl && cd testing
-  #     - name: Run cargo check
-  #       uses: actions-rs/cargo@v1
-  #       with:
-  #         command: ${{ matrix.runconfig }}
+  CheckBeta:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        runconfig: [
+          'check',
+          'check --target wasm32-unknown-unknown',
+          'check                                 --no-default-features',
+          'check --target wasm32-unknown-unknown --no-default-features',
+          'check                                 --no-default-features --features console_error_panic_hook',
+          'check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook',
+        ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install latest beta
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: beta
+            override: true
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: ${{ matrix.runconfig }}
           
-  # CheckNightly:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix: 
-  #       runconfig: [
-  #         'check',
-  #         'check --target wasm32-unknown-unknown',
-  #         'check                                 --no-default-features',
-  #         'check --target wasm32-unknown-unknown --no-default-features',
-  #         'check                                 --no-default-features --features console_error_panic_hook',
-  #         'check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook',
-  #         'check                                 --no-default-features --features "console_error_panic_hook wee_alloc"',
-  #         'check --target wasm32-unknown-unknown --no-default-features --features "console_error_panic_hook wee_alloc"',
-  #       ]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Install latest nightly
-  #       uses: actions-rs/toolchain@v1
-  #       with:
-  #           toolchain: nightly
-  #           override: true
-  #     - name: Add cargo-generate
-  #       uses: actions-rs/install@v0.1
-  #       with:
-  #         crate: cargo-generate
-  #         version: latest
-  #         use-tool-cache: true
-  #     - name: Clone Repo to Fix Broken Cargo.toml
-  #       uses: actions-rs/cargo@v1
-  #       with:
-  #         command: generate --git . --name testing
-  #     - name: Move Cargo.toml and Change Directory
-  #       run: mv Cargo.toml Cargo.toml.tmpl && cd testing
-  #     - name: Run cargo check
-  #       uses: actions-rs/cargo@v1
-  #       with:
-  #         command: ${{ matrix.runconfig }}
+  CheckNightly:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        runconfig: [
+          'check',
+          'check --target wasm32-unknown-unknown',
+          'check                                 --no-default-features',
+          'check --target wasm32-unknown-unknown --no-default-features',
+          'check                                 --no-default-features --features console_error_panic_hook',
+          'check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook',
+          'check                                 --no-default-features --features "console_error_panic_hook wee_alloc"',
+          'check --target wasm32-unknown-unknown --no-default-features --features "console_error_panic_hook wee_alloc"',
+        ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: nightly
+            override: true
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: ${{ matrix.runconfig }}
