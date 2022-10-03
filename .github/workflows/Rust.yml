@@ -139,5 +139,5 @@ jobs:
         with:
           registry: https://npm.pkg.github.com/
           token: ${{ secrets.GITHUB_TOKEN }}
-          package: ./build/package.json
+          package: ./pkg/package.json
           access: public
