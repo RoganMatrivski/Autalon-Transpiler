@@ -21,7 +21,11 @@ jobs:
           toolchain: stable
           override: true
       - name: Add cargo-generate
-        run: cargo install cargo-generate
+        uses: actions-rs/install@v0.1
+        with:
+          crate: cargo-generate
+          version: latest
+          use-tool-cache: true
       - name: Clone Repo to Fix Broken Cargo.toml
         uses: actions-rs/cargo@v1
         with:
@@ -53,7 +57,11 @@ jobs:
             toolchain: beta
             override: true
       - name: Add cargo-generate
-        run: cargo install cargo-generate
+        uses: actions-rs/install@v0.1
+        with:
+          crate: cargo-generate
+          version: latest
+          use-tool-cache: true
       - name: Clone Repo to Fix Broken Cargo.toml
         uses: actions-rs/cargo@v1
         with:
@@ -87,7 +95,11 @@ jobs:
             toolchain: nightly
             override: true
       - name: Add cargo-generate
-        run: cargo install cargo-generate
+        uses: actions-rs/install@v0.1
+        with:
+          crate: cargo-generate
+          version: latest
+          use-tool-cache: true
       - name: Clone Repo to Fix Broken Cargo.toml
         uses: actions-rs/cargo@v1
         with:
