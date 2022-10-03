@@ -20,6 +20,7 @@ jobs:
         with:
           toolchain: stable
           target: "wasm32-unknown-unknown"
+            profile: minimal
           override: true
       - name: Download wasm-pack
         uses: jetli/wasm-pack-action@v0.3.0
@@ -45,6 +46,7 @@ jobs:
         with:
             toolchain: beta
             target: "wasm32-unknown-unknown"
+            profile: minimal
             override: true
       - name: Run cargo check
         uses: actions-rs/cargo@v1
@@ -72,6 +74,7 @@ jobs:
         with:
             toolchain: nightly
             target: "wasm32-unknown-unknown"
+            profile: minimal
             override: true
       - name: Run cargo check
         uses: actions-rs/cargo@v1
