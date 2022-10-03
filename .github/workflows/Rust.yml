@@ -108,6 +108,7 @@ jobs:
   PublishNPM:
     name: Publish NPM Package
     runs-on: ubuntu-latest
+    if: ${{ false }}  # disable for now
     needs: [
       BuildWasm,
       CheckBeta,
