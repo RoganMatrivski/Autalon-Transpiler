@@ -1,0 +1,144 @@
+# This is a basic workflow to help you get started with Actions
+name: Rust CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+jobs:
+  BuildWasm:
+    name: Test Build WASM
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install latest stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: "wasm32-unknown-unknown"
+          profile: minimal
+          override: true
+      - name: Download wasm-pack
+        uses: jetli/wasm-pack-action@v0.3.0
+      - run: wasm-pack build
+      - run: wasm-pack test --chrome --firefox --headless
+
+  CheckBeta:
+    name: Check on Beta Toolchain
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        runconfig: [
+          'check',
+          'check --target wasm32-unknown-unknown',
+          'check                                 --no-default-features',
+          'check --target wasm32-unknown-unknown --no-default-features',
+          'check                                 --no-default-features --features console_error_panic_hook',
+          'check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook',
+        ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-beta-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install latest beta
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: beta
+            target: "wasm32-unknown-unknown"
+            profile: minimal
+            override: true
+      - run: cargo ${{ matrix.runconfig }}
+          
+  CheckNightly:
+    name: Check on Nightly Toolchain
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        runconfig: [
+          'check',
+          'check --target wasm32-unknown-unknown',
+          'check                                 --no-default-features',
+          'check --target wasm32-unknown-unknown --no-default-features',
+          'check                                 --no-default-features --features console_error_panic_hook',
+          'check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook',
+          'check                                 --no-default-features --features "console_error_panic_hook wee_alloc"',
+          'check --target wasm32-unknown-unknown --no-default-features --features "console_error_panic_hook wee_alloc"',
+        ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-nightly-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: nightly
+            target: "wasm32-unknown-unknown"
+            profile: minimal
+            override: true
+      - run: cargo ${{ matrix.runconfig }}
+
+  PublishNPM:
+    name: Publish NPM Package
+    runs-on: ubuntu-latest
+    if: ${{ false }}  # disable for now
+    needs: [
+      BuildWasm,
+      CheckBeta,
+      CheckNightly
+    ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install latest stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: "wasm32-unknown-unknown"
+          profile: minimal
+          override: true
+      - name: Download wasm-pack
+        uses: jetli/wasm-pack-action@v0.3.0
+      - run: wasm-pack build --release -s robinmauritz
+      - name: Publish to Github Repository
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          registry: https://npm.pkg.github.com/
+          token: ${{ secrets.GITHUB_TOKEN }}
+          package: ./pkg/package.json
+          access: public
