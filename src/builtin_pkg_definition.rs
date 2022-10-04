@@ -7,7 +7,7 @@ use crate::ostr;
 enum ArgType {
     String,
     Number,
-    Bool,
+    Boolean,
     ByOption,
 }
 
@@ -490,4 +490,5 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
     }
 }
 
+#[allow(dead_code)]
 pub enum BuiltinPkgVariables {}
