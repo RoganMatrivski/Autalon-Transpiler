@@ -141,13 +141,13 @@ jobs:
       - name: Download wasm-pack
         uses: jetli/wasm-pack-action@v0.3.0
       # Build package with the username scope
-      - run: wasm-pack build --release -s robinmauritz
+      - run: wasm-pack build --release -s RoganMatrivski
       # Setup node with registry-url
       - uses: actions/setup-node@v3
         with:
           registry-url: https://npm.pkg.github.com/ 
       # Add .npmrc config
-      - run : echo '@robinmauritz:registry=https://npm.pkg.github.com' > .npmrc
+      - run : echo '@RoganMatrivski:registry=https://npm.pkg.github.com' > .npmrc
         working-directory: ./pkg
       # Publish package
       - run: npm publish
