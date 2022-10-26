@@ -68,6 +68,27 @@ fn get_katalon_default_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> String {
         BuiltinPkgFunctions::MUIInputTextboxByLabelExact => {
             ostr!(r#"new ReactMUIGetter(driver).getTextboxFromLabel({arg1}).sendText({arg2})"#)
         }
+        BuiltinPkgFunctions::MUIInputDateByLabelExact => {
+            ostr!(r#"new ReactMUIGetter(driver).getDateFromLabel({arg1}).sendText({arg2})"#)
+        }
+        BuiltinPkgFunctions::MUIInputTimeByLabelExact => {
+            ostr!(r#"new ReactMUIGetter(driver).getTimeFromLabel({arg1}).sendText({arg2})"#)
+        }
+        BuiltinPkgFunctions::MUIInputHtmlByLabelExact => ostr!(
+            r#"new ReactMUIGetter(driver).getHTMLFromLabel({arg1}).clearText().sendRawText({arg2})"#
+        ),
+        BuiltinPkgFunctions::MUIInputDropdownUsingTextByLabelExact => ostr!(
+            r#"new ReactMUIGetter(driver).getDropdownFromLabel({arg1}).selectElementFromText({arg2})"#
+        ),
+        BuiltinPkgFunctions::MUIInputDropdownUsingIndexByLabelExact => ostr!(
+            r#"new ReactMUIGetter(driver).getDropdownFromLabel({arg1}).selectElementOnIndex({arg2})"#
+        ),
+        BuiltinPkgFunctions::MUIInputRadioUsingTextByLabelExact => ostr!(
+            r#"new ReactMUIGetter(driver).getRadioFromLabel({arg1}).selectElementFromText({arg2})"#
+        ),
+        BuiltinPkgFunctions::MUIInputRadioUsingIndexByLabelExact => ostr!(
+            r#"new ReactMUIGetter(driver).getRadioFromLabel({arg1}).selectElementOnIndex({arg2})"#
+        ),
         // fn_enum => unimplemented!(
         //     "Function {} from default package is currently unimplemented.",
         //     fn_enum

@@ -39,13 +39,13 @@ pub enum BuiltinPkgFunctions {
 
     // MUI funcs
     MUIInputTextboxByLabelExact,
-    // MUIInputDateByLabelExact,
-    // MUIInputHtmlByLabelExact,
-    // MUIInputNumberTextboxByLabelExact,
-    // MUIInputDropdownUsingTextByLabelExact,
-    // MUIInputDropdownUsingIndexByLabelExact,
-    // MUIInputRadioUsingTextByLabelExact,
-    // MUIInputRadioUsingIndexByLabelExact,
+    MUIInputDateByLabelExact,
+    MUIInputTimeByLabelExact,
+    MUIInputHtmlByLabelExact,
+    MUIInputDropdownUsingTextByLabelExact,
+    MUIInputDropdownUsingIndexByLabelExact,
+    MUIInputRadioUsingTextByLabelExact,
+    MUIInputRadioUsingIndexByLabelExact,
 }
 
 #[derive(Serialize)]
@@ -470,6 +470,153 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             name: ostr!("MUIInputTextboxByLabelExact"),
             display_name: ostr!("Input Textbox By Label Exact"),
             description: ostr!("Input textbox on form by label form"),
+            args: vec![
+                FunctionArgsMetadata {
+                    display_name: ostr!("Label"),
+                    description: ostr!("Label to find"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Input"),
+                    description: ostr!("Input to send"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+            ],
+            return_type: ostr!("void"),
+            target_ui: TargetUI::MUI,
+        },
+        BuiltinPkgFunctions::MUIInputDropdownUsingTextByLabelExact => FunctionMetadata {
+            name: ostr!("MUIInputDropdownUsingTextByLabelExact"),
+            display_name: ostr!("Input Dropdown By Label Exact"),
+            description: ostr!("Input dropdown on form by label form"),
+            args: vec![
+                FunctionArgsMetadata {
+                    display_name: ostr!("Label"),
+                    description: ostr!("Label to find"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Input"),
+                    description: ostr!("Input to send"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+            ],
+            return_type: ostr!("void"),
+            target_ui: TargetUI::MUI,
+        },
+        BuiltinPkgFunctions::MUIInputDropdownUsingIndexByLabelExact => FunctionMetadata {
+            name: ostr!("MUIInputDropdownUsingIndexByLabelExact"),
+            display_name: ostr!("Input Dropdown By Label Exact"),
+            description: ostr!("Input dropdown on form by label form"),
+            args: vec![
+                FunctionArgsMetadata {
+                    display_name: ostr!("Label"),
+                    description: ostr!("Label to find"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Input"),
+                    description: ostr!("Input to send"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+            ],
+            return_type: ostr!("void"),
+            target_ui: TargetUI::MUI,
+        },
+        BuiltinPkgFunctions::MUIInputRadioUsingTextByLabelExact => FunctionMetadata {
+            name: ostr!("MUIInputRadioByLabelExact"),
+            display_name: ostr!("Input Radio Using Text By Label Exact"),
+            description: ostr!("Input Radio on form by label form"),
+            args: vec![
+                FunctionArgsMetadata {
+                    display_name: ostr!("Label"),
+                    description: ostr!("Label to find"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Input"),
+                    description: ostr!("Input to send"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+            ],
+            return_type: ostr!("void"),
+            target_ui: TargetUI::MUI,
+        },
+        BuiltinPkgFunctions::MUIInputRadioUsingIndexByLabelExact => FunctionMetadata {
+            name: ostr!("MUIInputRadioUsingIndexByLabelExact"),
+            display_name: ostr!("Input Radio Using Index By Label Exact"),
+            description: ostr!("Input Radio on form by label form"),
+            args: vec![
+                FunctionArgsMetadata {
+                    display_name: ostr!("Label"),
+                    description: ostr!("Label to find"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Input"),
+                    description: ostr!("Input to send"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+            ],
+            return_type: ostr!("void"),
+            target_ui: TargetUI::MUI,
+        },
+        BuiltinPkgFunctions::MUIInputDateByLabelExact => FunctionMetadata {
+            name: ostr!("MUIInputDateByLabelExact"),
+            display_name: ostr!("Input Date By Label Exact"),
+            description: ostr!("Input date on form by label form"),
+            args: vec![
+                FunctionArgsMetadata {
+                    display_name: ostr!("Label"),
+                    description: ostr!("Label to find"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Input"),
+                    description: ostr!("Input to send"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+            ],
+            return_type: ostr!("void"),
+            target_ui: TargetUI::MUI,
+        },
+        BuiltinPkgFunctions::MUIInputTimeByLabelExact => FunctionMetadata {
+            name: ostr!("MUIInputTimeByLabelExact"),
+            display_name: ostr!("Input Time By Label Exact"),
+            description: ostr!("Input time on form by label form"),
+            args: vec![
+                FunctionArgsMetadata {
+                    display_name: ostr!("Label"),
+                    description: ostr!("Label to find"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+                FunctionArgsMetadata {
+                    display_name: ostr!("Input"),
+                    description: ostr!("Input to send"),
+                    arg_type: ostr!("string"),
+                    default_value: ostr!(""),
+                },
+            ],
+            return_type: ostr!("void"),
+            target_ui: TargetUI::MUI,
+        },
+        BuiltinPkgFunctions::MUIInputHtmlByLabelExact => FunctionMetadata {
+            name: ostr!("MUIInputHtmlByLabelExact"),
+            display_name: ostr!("Input HTML By Label Exact"),
+            description: ostr!("Input HTML on form by label form"),
             args: vec![
                 FunctionArgsMetadata {
                     display_name: ostr!("Label"),
