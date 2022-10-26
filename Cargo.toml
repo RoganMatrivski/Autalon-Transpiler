@@ -3,7 +3,7 @@ name = "autalon-transpiler"
 description = "An Autalon transpiler. Currently only supports: Java"
 repository = "https://github.com/RoganMatrivski/Autalon-Transpiler"
 license = "MIT/Apache-2.0"
-version = "0.1.8"
+version = "0.1.9"
 authors = ["Robin Mauritz <robinmauritzrm@gmail.com>"]
 edition = "2021"
 
