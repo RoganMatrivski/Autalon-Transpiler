@@ -106,13 +106,13 @@ jobs:
       - run: cargo ${{ matrix.runconfig }}
 
   publish-gpr:
+    name: Publish to Github Package Repository
     if: startsWith(github.ref, 'refs/tags/')
     needs: [
       BuildWasm,
       CheckBeta,
       CheckNightly
     ]
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       packages: write
