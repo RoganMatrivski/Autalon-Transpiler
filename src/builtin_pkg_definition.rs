@@ -4,6 +4,7 @@ use strum_macros::{Display, EnumIter, EnumString};
 
 use crate::ostr;
 
+#[allow(dead_code)]
 enum ArgType {
     String,
     Number,
