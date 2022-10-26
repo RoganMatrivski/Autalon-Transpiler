@@ -144,7 +144,6 @@ jobs:
       - run: wasm-pack build --release -s robinmauritz
       # Setup node with registry-url
       - uses: actions/setup-node@v3
-        working-directory: ./pkg
         with:
           registry-url: https://npm.pkg.github.com/ 
       # Add .npmrc config
