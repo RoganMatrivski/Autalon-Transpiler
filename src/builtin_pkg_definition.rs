@@ -430,8 +430,8 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
             target_ui: TargetUI::Any,
         },
         BuiltinPkgFunctions::GetAndSwitchToParentIFrame => FunctionMetadata {
-            name: ostr!("GetAndSwitchToAnyIFrame"),
-            display_name: ostr!("Get And Switch To Any IFrame"),
+            name: ostr!("GetAndSwitchToParentIFrame"),
+            display_name: ostr!("Get And Switch To Parent IFrame"),
             description: ostr!("Switch into parent IFrame"),
             args: vec![],
             return_type: ostr!("void"),
