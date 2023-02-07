@@ -1,24 +1,36 @@
-pub mod checker_funcs;
-pub mod pkg_fn_checker;
-pub mod static_var;
+pub mod compat_check;
+pub mod funcs;
 pub mod tree_checker;
-pub mod var_state_checker;
+pub mod var_checker;
 
+use std::collections::HashMap;
+
+use crate::autalonparser::Rule;
+use eyre::{bail, Report};
 use pest::iterators::Pair;
 
-use crate::Rule;
+pub struct Checker<'a> {
+    var_table: HashMap<&'a str, &'a str>,
+}
 
-pub fn statement_checker(pair: Pair<Rule>) -> Result<(), String> {
-    for stmt in pair.into_inner() {
-        match stmt.as_rule() {
+pub fn statement_checker(pair: Pair<Rule>) -> Result<(), Report> {
+    let mut checker = Checker::new();
+
+    for statement in pair.into_inner() {
+        match statement.as_rule() {
             Rule::expr => {
-                checker_funcs::get_expr_return_type(stmt)?;
+                checker.get_expr_returntype(statement.into_inner())?;
             }
-            Rule::var_declaration => var_state_checker::check_var_declaration(stmt)?,
-            Rule::var_assignment => var_state_checker::check_var_assignment(stmt)?,
+            Rule::var_declaration => {
+                checker.check_var_declaration(statement)?;
+            }
+            Rule::var_assignment => {
+                checker.check_var_assignment(statement)?;
+            }
             Rule::escape_block => (),
-            _ => unreachable!("{:?} is not implemented yet!", stmt.as_rule()),
-        }
+            nonmatch => bail!("{nonmatch:?} doesn't match any return type!"),
+        };
     }
+
     Ok(())
 }

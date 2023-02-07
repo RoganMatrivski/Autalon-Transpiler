@@ -1,34 +1,10 @@
-extern crate pest;
-#[macro_use]
-extern crate pest_derive;
-#[macro_use]
-extern crate lazy_static;
-
-use builtin_pkg_definition::BuiltinPkgFunctions;
-use strum::IntoEnumIterator;
-
-use pest::{iterators::Pair, Parser};
-
-#[derive(Parser)]
-#[grammar = "parser/expr.pest"]
-struct AutalonParser;
-
-// mod builtin_pkg_list;
-mod builtin_pkg_definition;
-mod checker;
-mod common_func;
-mod transpiler;
-// mod config;
-
-mod utils;
-
 use wasm_bindgen::prelude::*;
 
-// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-// allocator.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+pub mod autalonparser;
+pub mod builtin_package_definition;
+pub mod checker;
+pub mod init;
+pub mod transpiler;
 
 #[wasm_bindgen]
 extern "C" {
@@ -39,13 +15,10 @@ extern "C" {
 }
 
 #[wasm_bindgen(start)]
-pub fn startup() {
-    utils::set_panic_hook();
-    log(format!(
-        "Autalon Transpiler initialized! Currently running version: {}",
-        env!("CARGO_PKG_VERSION")
-    )
-    .as_str());
+pub fn startup() -> Result<(), JsValue> {
+    init::init()?;
+
+    Ok(())
 }
 
 #[wasm_bindgen]
@@ -55,7 +28,8 @@ pub fn greet() {
 
 #[wasm_bindgen]
 pub fn transpile_groovy(code: &str) -> String {
-    log(format!("Attempting to transpile code below:\n\n{}", code).as_str());
+    use autalonparser::{AutalonParser, Rule};
+    use pest::{iterators::Pair, Parser};
 
     let parsed = AutalonParser::parse(Rule::program, code).expect("Failed to parse");
 
@@ -76,14 +50,102 @@ pub fn transpile_groovy(code: &str) -> String {
         }
     }
 
-    transpiler::program_handler(checked_pair).unwrap()
+    match transpiler::program_handler(transpiler::TranspilerOption::Groovy, &checked_pair) {
+        Ok(res) => res,
+        Err(err) => {
+            tracing::error!(err = err.to_string(), "Failed transpiling script!");
+            "".to_string()
+        }
+    }
 }
 
-#[wasm_bindgen]
-pub fn get_fn_metadata() -> String {
-    let metadata_list: Vec<builtin_pkg_definition::FunctionMetadata> = BuiltinPkgFunctions::iter()
-        .map(|x| builtin_pkg_definition::get_fn_metadata(&x))
-        .collect();
+#[cfg(test)]
+mod tests {
+    use wasm_bindgen_test::*;
 
-    serde_json::to_string_pretty(&metadata_list).expect("Cannot stringify metadata_list")
+    use crate::autalonparser::{AutalonParser, Rule};
+    use crate::checker;
+    use pest::Parser;
+
+    #[test]
+    #[wasm_bindgen_test]
+    fn pass_returntype_comparation() -> eyre::Result<()> {
+        let mut test = AutalonParser::parse(Rule::comp_op, "true == true")?;
+        let mut checker = checker::Checker::new();
+
+        println!(
+            "{}",
+            checker.get_comp_returntype(test.next().unwrap().into_inner())?
+        );
+        Ok(())
+    }
+
+    #[test]
+    #[wasm_bindgen_test]
+    fn pass_returntype_comparationlogic() -> eyre::Result<()> {
+        let mut test = AutalonParser::parse(Rule::logic_op, "true && false == false && false")?;
+        let mut checker = checker::Checker::new();
+
+        println!(
+            "{}",
+            checker.get_logic_returntype(test.next().unwrap().into_inner())?
+        );
+        Ok(())
+    }
+
+    #[test]
+    #[wasm_bindgen_test]
+    fn pass_returntype_logic() -> eyre::Result<()> {
+        let mut test = AutalonParser::parse(Rule::logic_op, "true && false")?;
+        let mut checker = checker::Checker::new();
+
+        println!(
+            "{}",
+            checker.get_logic_returntype(test.next().unwrap().into_inner())?
+        );
+        Ok(())
+    }
+
+    #[test]
+    #[wasm_bindgen_test]
+    fn pass_returntype_expr_pkgmember_noargs() -> eyre::Result<()> {
+        let mut test = AutalonParser::parse(Rule::expr, "#:GetAndSwitchToAnyIFrame();")?;
+        let mut checker = checker::Checker::new();
+
+        println!(
+            "{}",
+            checker.get_expr_returntype(test.next().unwrap().into_inner())?
+        );
+        Ok(())
+    }
+
+    #[test]
+    #[wasm_bindgen_test]
+    fn pass_returntype_expr_pkgmember_args() -> eyre::Result<()> {
+        let mut test = AutalonParser::parse(Rule::expr, "#:NavigateToUrl(\"google.com\");")?;
+        let mut checker = checker::Checker::new();
+
+        println!(
+            "{}",
+            checker.get_expr_returntype(test.next().unwrap().into_inner())?
+        );
+        Ok(())
+    }
+
+    #[test]
+    #[wasm_bindgen_test]
+    fn pass_vardeclaration() -> eyre::Result<()> {
+        let mut test = AutalonParser::parse(Rule::statement, "var test = \"asd\";")?;
+        checker::statement_checker(test.next().unwrap())?;
+        Ok(())
+    }
+
+    #[test]
+    #[wasm_bindgen_test]
+    fn pass_varassignment() -> eyre::Result<()> {
+        let mut test =
+            AutalonParser::parse(Rule::statement, "var test = \"asd\"; test = \"testassign\"")?;
+        checker::statement_checker(test.next().unwrap())?;
+        Ok(())
+    }
 }

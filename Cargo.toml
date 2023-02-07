@@ -3,17 +3,13 @@ name = "autalon-transpiler"
 description = "An Autalon transpiler. Currently only supports: Java"
 repository = "https://github.com/RoganMatrivski/Autalon-Transpiler"
 license = "MIT/Apache-2.0"
-version = "0.1.9"
+version = "0.2.0"
 authors = ["Robin Mauritz <robinmauritzrm@gmail.com>"]
 edition = "2021"
 
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-
-[[bin]]
-name = "runtime"
-path = "src/main.rs"
 
 [features]
 default = ["console_error_panic_hook"]
@@ -25,19 +21,11 @@ wasm-bindgen = "0.2.63"
 # logging them with `console.error`. This is great for development, but requires
 # all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
 # code size when deploying.
-console_error_panic_hook = { version = "0.1.6", optional = true }
-
-# `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size
-# compared to the default allocator's ~10K. It is slower than the default
-# allocator, however.
-#
-# Unfortunately, `wee_alloc` requires nightly Rust when targeting wasm for now.
-wee_alloc = { version = "0.4.5", optional = true }
+console_error_panic_hook = { version = "0.1.7", optional = true }
 
 # Program deps
-lazy_static = "1.4.0"
-pest = "~2.3"
-pest_derive = "~2.3"
+pest = "~2.5"
+pest_derive = "~2.5"
 
 strum = "0.24"
 strum_macros = "0.24"
@@ -46,6 +34,9 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
 strfmt = "^0.2"
+tracing = "0.1.37"
+tracing-wasm = "0.2.1"
+eyre = "0.6.8"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.13"
