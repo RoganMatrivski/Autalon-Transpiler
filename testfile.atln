@@ -1,0 +1,22 @@
+#[version=1]
+#[driver_ver=0.1.1]
+
+var test = "";
+test = "";
+
+#:InputTextboxByLabelExact("id", "sysadmin");
+#:InputTextboxByLabelExact("pass", "superuser");
+#:ClickElementByText("Login", "*");
+
+#:InputTextboxByLabelExact("field1", "123");
+#:InputTextboxByLabelExact("field2", "asd");
+
+#:NavigateToUrl("http://ndsrndserver.southeastasia.cloudapp.azure.com/NF2AlphaTest/Default.aspx");
+#:SendTextToElementByString("txtUsername", "sysadmin", ByOption.ID, "input");
+#:SendTextToElementByString("txtPassword", "superuser", ByOption.ID, "input");
+#:ClickElementByString("btnLogin", ByOption.ID, "*");
+#:SendTextToElementByString("TriggerField", "Email Template", ByOption.ID, "input");
+#:ClickElementByText("View", "*");
+#:GetAndSwitchToAnyIFrame();
+#:ClickElementByText("Add New Record", "*");
+#:GetElementByText("Email Template Add", "*");

@@ -1,0 +1,88 @@
+WHITESPACE     = _{" "|"\t"|"\r"|"\n"|"\r\n"}
+COMMENT        = _{"/*" ~ (!"*/" ~ ANY)* ~ "*/"}
+INLINE_COMMENT = @{"//" ~ (!NEWLINE ~ ANY)* ~ NEWLINE}
+
+program = _{SOI ~ cfg_section* ~ (statement|INLINE_COMMENT)* ~ EOI}
+
+statement =  {(var_declaration|var_assignment|escape_block|expr) ~ ";"}
+
+cfg_section     =  {"#[" ~ cfg_assign_pair ~ "]"}
+cfg_assign_pair =  {cfg_key ~ "=" ~ cfg_value}
+cfg_key         = @{ident_char+}
+cfg_value       = @{(cfg_value_char+|"\"" ~ cfg_value_char+ ~ "\"")}
+cfg_value_char  =  {ASCII_ALPHANUMERIC|"."|"_"|"/"|"*"}
+
+var_declaration = @{"var " ~ var_assignment}
+var_assignment  = !{identifier ~ "=" ~ expr}
+
+expr       =  {basic_expr ~ (expr_infix ~ basic_expr)*}
+basic_expr =  {logic_op|comp_op|string|number|bool|array_access|function_call|byoption_enum|member_access}
+
+expr_infix  = _{(add_op|sub_op|div_op|mul_op|mod_op|pow_op)}
+expr_prefix = _{not_logic}
+  not_logic =  {"!"}
+
+byoption_enum = @{"ByOption." ~ ident_char+}
+
+escape_block =  {"unparsed" ~ "###{" ~ (!("}###") ~ ANY)* ~ "}###"}
+
+logic_op            =  {logic_primary ~ logic_infix_op ~ logic_primary ~(logic_infix_op ~ logic_primary)*}
+  logic_primary     = _{(comp_op|comparable)}
+    comp_op         =  {comparable ~ comp_infix_op ~ comparable ~ (comp_infix_op ~ comparable)*}
+      comp_infix_op = _{(eq_op|ne_op|le_op|lt_op|ge_op|gt_op)}
+      comparable    = _{string|number|bool|member_access}
+  logic_infix_op    = _{(and_op|or_op)}
+
+bool =  {"true"|"false"}
+
+array_access   =  {member_access ~ "[" ~ indexable_expr ~ "]"}
+indexable_expr =  {number|function_call|member_access}
+
+function_call        =  {member_access ~ ("()"|"(" ~ comma_separated_expr ~ ")")}
+comma_separated_expr = !{expr ~ ("," ~ expr)*}
+package              =  {identifier+|aliases}
+aliases              =  {"#"}
+member_access        =  {(package ~ ":")? ~ identifier ~ ("." ~ identifier)*}
+atomic_expression    =  {identifier|string|number}
+identifier           = @{ident_char+}
+
+ident_char = @{ASCII_ALPHANUMERIC|"_"}
+
+char        = @{
+    ASCII_ALPHANUMERIC
+  | "."
+  | "_"
+  | "/"
+  | "*"
+  | WHITESPACE
+}
+string_char =  {
+    !("\""|"\\") ~ ANY
+  | "\\" ~ ("\""|"\\"|"/"|"b"|"f"|"n"|"r"|"t")
+  | "\\" ~ ("u" ~ ASCII_HEX_DIGIT{4})
+}
+inner       = @{string_char*}
+string      = @{"\"" ~ inner ~ "\""}
+
+number =  {("+"|"-")? ~ ASCII_DIGIT+}
+
+// Arithmetic op
+add_op =  {"+"}
+sub_op =  {"-"}
+div_op =  {"/"}
+mul_op =  {"*"}
+mod_op =  {"%"}
+pow_op =  {"^"}
+
+// Relational op
+eq_op =  {"=="}
+ne_op =  {"!="}
+lt_op =  {"<"}
+le_op =  {"<="}
+gt_op =  {">"}
+ge_op =  {">="}
+
+// Logic op
+and_op =  {"&&"}
+or_op  =  {"||"}
+
