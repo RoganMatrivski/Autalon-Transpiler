@@ -11,10 +11,6 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
-[[bin]]
-name = "runtime"
-path = "src/main.rs"
-
 [features]
 default = ["console_error_panic_hook"]
 
