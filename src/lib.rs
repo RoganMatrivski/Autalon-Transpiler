@@ -6,6 +6,16 @@ pub mod checker;
 pub mod init;
 pub mod transpiler;
 
+extern crate alloc;
+
+#[cfg(feature = "lol_alloc")]
+use lol_alloc::{AssumeSingleThreaded, FreeListAllocator};
+
+#[cfg(feature = "lol_alloc")]
+#[global_allocator]
+static ALLOCATOR: AssumeSingleThreaded<FreeListAllocator> =
+    unsafe { AssumeSingleThreaded::new(FreeListAllocator::new()) };
+
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
