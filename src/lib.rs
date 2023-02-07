@@ -27,7 +27,7 @@ pub fn greet() {
 }
 
 #[wasm_bindgen]
-pub fn transpile_groovy(code: &str) -> String {
+pub fn transpile_groovy(code: &str) -> Result<String, String> {
     use autalonparser::{AutalonParser, Rule};
     use pest::{iterators::Pair, Parser};
 
@@ -46,16 +46,33 @@ pub fn transpile_groovy(code: &str) -> String {
 
         match checker::statement_checker(pair.clone()) {
             Ok(_) => checked_pair.push(pair),
-            Err(err) => panic!("ERROR! : {}", err),
+            Err(err) => return Err(format!("{:?}", err)),
         }
     }
 
-    match transpiler::program_handler(transpiler::TranspilerOption::Groovy, &checked_pair) {
-        Ok(res) => res,
-        Err(err) => {
-            tracing::error!(err = err.to_string(), "Failed transpiling script!");
-            "".to_string()
-        }
+    Ok(
+        match transpiler::program_handler(transpiler::TranspilerOption::Groovy, &checked_pair) {
+            Ok(res) => res,
+            Err(err) => {
+                tracing::error!(err = err.to_string(), "Failed transpiling script!");
+                "".to_string()
+            }
+        },
+    )
+}
+
+#[wasm_bindgen]
+pub fn get_fn_metadata() -> Result<String, String> {
+    use builtin_package_definition::{get_fn_metadata, BuiltinPkgFunctions, FunctionMetadata};
+    use strum::IntoEnumIterator;
+
+    let metadata_list: Vec<FunctionMetadata> = BuiltinPkgFunctions::iter()
+        .map(|x| get_fn_metadata(&x))
+        .collect();
+
+    match serde_json::to_string_pretty(&metadata_list) {
+        Ok(list) => Ok(list),
+        Err(err) => Err(format!("{:?}", err)),
     }
 }
 
