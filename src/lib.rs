@@ -15,7 +15,11 @@ extern "C" {
 }
 
 #[wasm_bindgen(start)]
-pub fn startup() {}
+pub fn startup() -> Result<(), JsValue> {
+    init::init()?;
+
+    Ok(())
+}
 
 #[wasm_bindgen]
 pub fn greet() {
@@ -61,7 +65,7 @@ mod tests {
 
     use crate::autalonparser::{AutalonParser, Rule};
     use crate::checker;
-    use pest::{Parser};
+    use pest::Parser;
 
     #[test]
     #[wasm_bindgen_test]
