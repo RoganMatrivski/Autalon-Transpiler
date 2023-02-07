@@ -32,6 +32,21 @@ pub fn statement_handler(pair: Pair<Rule>) -> Result<String, Report> {
 
 fn pair_convert(pair: Pair<Rule>) -> Result<String, Report> {
     match pair.as_rule() {
+        Rule::atomic_expression => pair_convert(unwrap_inner(pair)?),
+        Rule::basic_expr => pair_convert(unwrap_inner(pair)?),
+
+        Rule::comparable => comparable_convert(pair), // Ok("bool".to_string()),
+        Rule::string => str_convert(pair),            // Ok("string".to_string()),
+        Rule::number => number_convert(pair),         // Ok("number".to_string()),
+        Rule::bool => bool_convert(pair),             // Ok("bool".to_string()),
+        Rule::byoption_enum => byoption_convert(pair), // Ok("number".to_string()),
+
+        Rule::logic_op => logicop_convert(pair), // Ok("bool".to_string()),
+        Rule::comp_op => comp_op_convert(pair),  // Ok("bool".to_string()),
+
+        Rule::function_call => fn_convert(pair), // get_fn_pair_return_type(pair),
+        Rule::member_access => member_access_convert(pair), // get_member_return_type(pair),
+
         Rule::eq_op => compop_symbol_convert(pair),
         Rule::ne_op => compop_symbol_convert(pair),
         Rule::lt_op => compop_symbol_convert(pair),
@@ -106,7 +121,7 @@ fn fn_convert(pair: Pair<Rule>) -> Result<String, Report> {
         Some(outer_pair) => outer_pair
             .into_inner()
             .into_iter()
-            .map(|pair| expr_convert(pair))
+            .map(expr_convert)
             .collect::<Result<Vec<String>, Report>>()?,
     };
 
@@ -130,8 +145,8 @@ fn fn_convert(pair: Pair<Rule>) -> Result<String, Report> {
         None => unimplemented!(), // Fn is local, none of this one for now
     };
 
-    let formatted_res = if converted_args.len() > 0 {
-        match strfmt::strfmt(&res, &converted_args) {
+    let formatted_res = if !converted_args.is_empty() {
+        match strfmt::strfmt(res, &converted_args) {
             Ok(fmtstr) => fmtstr,
             Err(e) => panic!("{}", e),
         }
@@ -140,6 +155,12 @@ fn fn_convert(pair: Pair<Rule>) -> Result<String, Report> {
     };
 
     Ok(formatted_res)
+}
+
+fn member_access_convert(pair: Pair<Rule>) -> Result<String, Report> {
+    // For now, just return what's inside the cast
+    let inner = unwrap_inner(pair)?;
+    Ok(inner.as_str().to_string())
 }
 
 fn logicop_convert(pair: Pair<Rule>) -> Result<String, Report> {
