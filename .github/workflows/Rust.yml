@@ -82,8 +82,6 @@ jobs:
           'check --target wasm32-unknown-unknown --no-default-features',
           'check                                 --no-default-features --features console_error_panic_hook',
           'check --target wasm32-unknown-unknown --no-default-features --features console_error_panic_hook',
-          'check                                 --no-default-features --features "console_error_panic_hook wee_alloc"',
-          'check --target wasm32-unknown-unknown --no-default-features --features "console_error_panic_hook wee_alloc"',
         ]
     steps:
       - uses: actions/checkout@v2
