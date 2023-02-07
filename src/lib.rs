@@ -46,7 +46,7 @@ pub fn transpile_groovy(code: &str) -> String {
         }
     }
 
-    match (transpiler::program_handler(transpiler::TranspilerOption::Groovy, &checked_pair)) {
+    match transpiler::program_handler(transpiler::TranspilerOption::Groovy, &checked_pair) {
         Ok(res) => res,
         Err(err) => {
             tracing::error!(err = err.to_string(), "Failed transpiling script!");
@@ -61,7 +61,7 @@ mod tests {
 
     use crate::autalonparser::{AutalonParser, Rule};
     use crate::checker;
-    use pest::{iterators::Pair, Parser};
+    use pest::{Parser};
 
     #[test]
     #[wasm_bindgen_test]
