@@ -104,7 +104,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                 FunctionArgsMetadata {
                     display_name: ("By Option"),
                     description: ("The attribute to match with the string"),
-                    arg_type: ("ByOption"),
+                    arg_type: ("byoption"),
                     default_value: ("ByOption.Text"),
                 },
                 FunctionArgsMetadata {
@@ -137,7 +137,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                 FunctionArgsMetadata {
                     display_name: ("By Option"),
                     description: ("The attribute to match with the string"),
-                    arg_type: ("ByOption"),
+                    arg_type: ("byoption"),
                     default_value: ("ByOption.Text"),
                 },
                 FunctionArgsMetadata {
@@ -177,7 +177,7 @@ pub fn get_fn_metadata(builtin_fn: &BuiltinPkgFunctions) -> FunctionMetadata {
                 FunctionArgsMetadata {
                     display_name: ("By Option"),
                     description: ("The attribute to match with the string"),
-                    arg_type: ("ByOption"),
+                    arg_type: ("byoption"),
                     default_value: ("ByOption.Text"),
                 },
                 FunctionArgsMetadata {

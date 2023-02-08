@@ -1,6 +1,5 @@
 pub fn add_prepend(script: &str) -> String {
-    const PREPEND: &str = r#"
-import static com.kms.katalon.core.checkpoint.CheckpointFactory.findCheckpoint
+    const PREPEND: &str = r#"import static com.kms.katalon.core.checkpoint.CheckpointFactory.findCheckpoint
 import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
 import static com.kms.katalon.core.testdata.TestDataFactory.findTestData
 import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
@@ -35,7 +34,10 @@ WebUI.setViewPortSize(1280, 720)
 WebUI.maximizeWindow()
 def driver = DriverFactory.getWebDriver()
 def driverExt = new WebDriverExtended(driver)
+
 "#;
 
-    String::from(PREPEND) + script
+    const APPEND: &str = r#""#;
+
+    String::from(PREPEND) + script + APPEND
 }
