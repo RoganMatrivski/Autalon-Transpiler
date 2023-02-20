@@ -1,3 +1,5 @@
+use std::io::Read;
+
 use wasm_bindgen::prelude::*;
 
 pub mod autalonparser;
@@ -59,6 +61,37 @@ pub fn transpile_groovy(code: &str) -> Result<String, String> {
             }
         },
     )
+}
+
+pub fn get_groovy_project_dir(
+    code: &str,
+    project_zip: &[u8],
+    driver_jar_name: &str,
+    driver_jar_bytes: &[u8],
+) -> Result<Vec<u8>, String> {
+    use std::io::Write;
+    use zip::{write::FileOptions, ZipWriter};
+
+    // Clones new file, read, and append new files
+    let mut_project_zip = Vec::from(project_zip);
+    let seekable_project_zip = std::io::Cursor::new(mut_project_zip);
+    let mut zip = ZipWriter::new_append(seekable_project_zip)
+        .map_err(|err| format!("Failed to read project zip! {err}"))?;
+
+    zip.start_file(format!("Drivers/{driver_jar_name}"), FileOptions::default())
+        .map_err(|err| format!("Failed to set Autalon driver file! {err}"))?;
+    zip.write(driver_jar_bytes)
+        .map_err(|err| format!("Failed to write Autalon driver! {err}"))?;
+
+    let res = zip
+        .finish()
+        .map_err(|err| format!("Failed to finish zip file! {err}"))?;
+
+    let res = res
+        .bytes()
+        .collect::<Result<Vec<u8>, std::io::Error>>()
+        .map_err(|err| format!("Failed to get zip file bytes! {err}"))?;
+    Ok(res)
 }
 
 #[wasm_bindgen]
