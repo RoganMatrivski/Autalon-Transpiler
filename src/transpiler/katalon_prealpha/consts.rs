@@ -17,27 +17,30 @@ import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 import com.kms.katalon.core.windows.keyword.WindowsBuiltinKeywords as Windows
 import internal.GlobalVariable as GlobalVariable
 import com.kms.katalon.core.webui.driver.DriverFactory as DriverFactory
+
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.By as By
-import com.nawadata.nfunittestlibrary.Tools
-import com.nawadata.nfunittestlibrary.Consts
-import com.nawadata.nfunittestlibrary.Enums.*
-import com.nawadata.nfunittestlibrary.Enums.ByOption
-import com.nawadata.nfunittestlibrary.WebDriverExtended
-import com.nawadata.nfunittestlibrary.WebElementExtended
-import com.nawadata.nfunittestlibrary.ExtUIGetter
-import com.nawadata.nfunittestlibrary.ReactMUIGetter
+
+import com.nawadata.nfunittestlibrary.*
+import com.nawadata.nfunittestlibrary.v2.*
+import com.nawadata.nfunittestlibrary.finder.webelementext.WebElementExtFrom
+
 WebUI.openBrowser("")
 WebUI.setViewPortSize(1280, 720)
-WebUI.maximizeWindow()
 def driver = DriverFactory.getWebDriver()
-def driverExt = new WebDriverExtended(driver)
+use (ExtensionsKt) {
+
+def getElExt = driver.getElement()
+def extUIGetter = driver.uiGetter().extUI()
+def reactMUIGetter = driver.uiGetter().reactMUI()
 
 "#;
 
-    const APPEND: &str = r#""#;
+    const APPEND: &str = r#"
+
+}"#;
 
     String::from(PREPEND) + script + APPEND
 }
