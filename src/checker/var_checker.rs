@@ -1,7 +1,7 @@
 use std::collections::{hash_map::Entry, HashMap};
 
 use crate::checker::{funcs::unwrap_inner, Checker};
-use eyre::{bail, Report};
+use color_eyre::eyre::{bail, Report};
 use pest::iterators::Pair;
 
 use crate::autalonparser::Rule;
@@ -13,6 +13,7 @@ impl<'a> Default for Checker<'a> {
 }
 
 impl<'a> Checker<'a> {
+    #[tracing::instrument]
     pub fn new() -> Checker<'a> {
         Checker {
             var_table: HashMap::new(),
@@ -21,6 +22,7 @@ impl<'a> Checker<'a> {
 }
 
 impl<'a> Checker<'a> {
+    #[tracing::instrument(skip_all)]
     pub fn check_var_declaration(&mut self, pair: Pair<'a, Rule>) -> Result<(), Report> {
         if pair.as_rule() != Rule::var_declaration {
             bail!("Pair is not a variable declaration");
@@ -39,6 +41,7 @@ impl<'a> Checker<'a> {
         Ok(())
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn check_var_assignment(&mut self, pair: Pair<'a, Rule>) -> Result<(), Report> {
         if pair.as_rule() != Rule::var_assignment {
             bail!("Pair is not a variable declaration")
@@ -64,6 +67,7 @@ impl<'a> Checker<'a> {
         }
     }
 
+    #[tracing::instrument(skip(self))]
     pub fn var_insert(&mut self, name: &'a str, vartype: &'a str) -> Result<(), Report> {
         let entry = self.var_table.entry(name);
         match entry {
@@ -75,6 +79,7 @@ impl<'a> Checker<'a> {
         }
     }
 
+    #[tracing::instrument(skip(self))]
     pub fn var_lookup(&mut self, name: &'a str) -> Result<&'a str, Report> {
         let entry = self.var_table.entry(name);
         if let Entry::Occupied(keyval) = entry {

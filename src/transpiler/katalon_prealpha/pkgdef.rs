@@ -1,4 +1,4 @@
-use eyre::{bail, Report};
+use color_eyre::eyre::{bail, Report};
 use std::str::FromStr;
 
 use crate::builtin_package_definition::{self, BuiltinPkgFunctions};

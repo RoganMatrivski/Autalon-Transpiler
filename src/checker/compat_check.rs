@@ -1,7 +1,8 @@
-use eyre::{eyre, Report};
+use color_eyre::eyre::{eyre, Report};
 
 use crate::autalonparser::Rule;
 
+#[tracing::instrument]
 pub fn check_type_arithmetic(lhs: &str, rhs: &str) -> Result<(), Report> {
     // TODO: Use oncecell for these kind of types maybe?
     let map = std::collections::HashMap::from([
@@ -21,6 +22,7 @@ pub fn check_type_arithmetic(lhs: &str, rhs: &str) -> Result<(), Report> {
     }
 }
 
+#[tracing::instrument]
 pub fn check_arithmetic_op(rhs: &str, optype: Rule) -> Result<(), Report> {
     // TODO: Use oncecell for these kind of types maybe?
     let map = std::collections::HashMap::from([
@@ -49,6 +51,7 @@ pub fn check_arithmetic_op(rhs: &str, optype: Rule) -> Result<(), Report> {
     }
 }
 
+#[tracing::instrument]
 pub fn check_comparation_op(rhs: &str, op_type: Rule) -> Result<(), Report> {
     // TODO: Use oncecell for these kind of types maybe?
     let map = std::collections::HashMap::from([

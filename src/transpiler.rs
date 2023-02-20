@@ -1,5 +1,5 @@
 use crate::autalonparser::Rule;
-use eyre::Report;
+use color_eyre::eyre::Report;
 use pest::iterators::Pair;
 
 pub mod katalon_prealpha;

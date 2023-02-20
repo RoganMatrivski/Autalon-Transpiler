@@ -1,12 +1,13 @@
 use std::str::FromStr;
 
 use crate::checker::{compat_check, funcs::unwrap_inner, Checker};
-use eyre::{bail, eyre, ContextCompat, Report};
+use color_eyre::eyre::{bail, eyre, Context, ContextCompat, Report};
 use pest::iterators::{Pair, Pairs};
 
 use crate::autalonparser::Rule;
 
 impl<'a> Checker<'a> {
+    #[tracing::instrument(skip(pair))]
     pub fn get_pair_returntype(&mut self, pair: Pair<'a, Rule>) -> Result<&'a str, Report> {
         match pair.as_rule() {
             Rule::string => Ok("string"),
@@ -29,6 +30,7 @@ impl<'a> Checker<'a> {
         }
     }
 
+    #[tracing::instrument(skip(pairs))]
     pub fn get_expr_returntype(&mut self, pairs: Pairs<'a, Rule>) -> Result<&'a str, Report> {
         use pest::pratt_parser::{Assoc, Op, PrattParser};
         let parser = PrattParser::new()
@@ -55,6 +57,7 @@ impl<'a> Checker<'a> {
             .parse(pairs)
     }
 
+    #[tracing::instrument(skip(comparable))]
     pub fn get_comparable_returntype(
         &mut self,
         comparable: Pair<'a, Rule>,
@@ -69,6 +72,7 @@ impl<'a> Checker<'a> {
         }
     }
 
+    #[tracing::instrument(skip(logic_pairs))]
     pub fn get_logic_returntype(
         &mut self,
         logic_pairs: Pairs<'a, Rule>,
@@ -93,6 +97,7 @@ impl<'a> Checker<'a> {
             .parse(logic_pairs)
     }
 
+    #[tracing::instrument(skip(comp_op_pairs))]
     pub fn get_comp_returntype(
         &mut self,
         comp_op_pairs: Pairs<'a, Rule>,
@@ -186,6 +191,7 @@ impl<'a> Checker<'a> {
         Ok(result)
     }
 
+    #[tracing::instrument(skip(pair))]
     pub fn get_member_returntype(&mut self, pair: Pair<'a, Rule>) -> Result<&'a str, Report> {
         if pair.as_rule() != Rule::function_call {
             bail!(
@@ -214,6 +220,7 @@ impl<'a> Checker<'a> {
         Ok(result)
     }
 
+    #[tracing::instrument]
     pub fn get_pkgfn_returntype(
         &mut self,
         name: &'a str,
@@ -227,7 +234,8 @@ impl<'a> Checker<'a> {
 
         let function_metadata = match pkg {
             "builtin" => {
-                let fn_enum = BuiltinPkgFunctions::from_str(name)?;
+                let fn_enum = BuiltinPkgFunctions::from_str(name)
+                    .context(format!("Failed to match enum {name}"))?;
                 get_fn_metadata(&fn_enum)
             }
 

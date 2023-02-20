@@ -6,9 +6,10 @@ pub mod var_checker;
 use std::collections::HashMap;
 
 use crate::autalonparser::Rule;
-use eyre::{bail, Report};
+use color_eyre::eyre::{bail, Report};
 use pest::iterators::Pair;
 
+#[derive(Debug)]
 pub struct Checker<'a> {
     var_table: HashMap<&'a str, &'a str>,
 }

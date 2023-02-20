@@ -4,9 +4,10 @@ mod pkgdef;
 use std::collections::HashMap;
 
 use crate::{autalonparser::Rule, checker::funcs::unwrap_inner};
-use eyre::{bail, ContextCompat, Report};
+use color_eyre::eyre::{bail, ContextCompat, Report};
 use pest::iterators::Pair;
 
+#[tracing::instrument(skip_all)]
 pub fn program_handler(pair: &[Pair<Rule>]) -> Result<String, Report> {
     let res = pair
         .iter()
@@ -20,6 +21,7 @@ pub fn program_handler(pair: &[Pair<Rule>]) -> Result<String, Report> {
     Ok(consts::add_prepend(&res))
 }
 
+#[tracing::instrument(skip_all)]
 pub fn statement_handler(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(match pair.as_rule() {
         Rule::expr => expr_convert(pair)?,
@@ -30,6 +32,7 @@ pub fn statement_handler(pair: Pair<Rule>) -> Result<String, Report> {
     } + ";")
 }
 
+#[tracing::instrument(skip_all)]
 fn pair_convert(pair: Pair<Rule>) -> Result<String, Report> {
     match pair.as_rule() {
         Rule::atomic_expression => pair_convert(unwrap_inner(pair)?),
@@ -68,6 +71,7 @@ fn pair_convert(pair: Pair<Rule>) -> Result<String, Report> {
     }
 }
 
+#[tracing::instrument(skip_all)]
 fn expr_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(pair
         .into_inner()
@@ -77,6 +81,7 @@ fn expr_convert(pair: Pair<Rule>) -> Result<String, Report> {
         .join(" "))
 }
 
+#[tracing::instrument(skip_all)]
 fn fn_convert(pair: Pair<Rule>) -> Result<String, Report> {
     if pair.as_rule() != Rule::function_call {
         bail!("Pair is not a function")
@@ -157,12 +162,14 @@ fn fn_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(formatted_res)
 }
 
+#[tracing::instrument(skip_all)]
 fn member_access_convert(pair: Pair<Rule>) -> Result<String, Report> {
     // For now, just return what's inside the cast
     let inner = unwrap_inner(pair)?;
     Ok(inner.as_str().to_string())
 }
 
+#[tracing::instrument(skip_all)]
 fn logicop_convert(pair: Pair<Rule>) -> Result<String, Report> {
     let mut inner_pair = pair.into_inner();
 
@@ -181,6 +188,7 @@ fn logicop_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(format!("{} {} {}", lhs_conv, op_conv, rhs_conv))
 }
 
+#[tracing::instrument(skip_all)]
 fn comp_op_convert(pair: Pair<Rule>) -> Result<String, Report> {
     let mut inner_pair = pair.into_inner();
 
@@ -199,6 +207,7 @@ fn comp_op_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(format!("{} {} {}", lhs_conv, op_conv, rhs_conv))
 }
 
+#[tracing::instrument(skip_all)]
 fn var_declaration_convert(pair: Pair<Rule>) -> Result<String, Report> {
     let var_assignment = unwrap_inner(pair)?;
 
@@ -207,6 +216,7 @@ fn var_declaration_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(format!("def {}", var_assignment_conv))
 }
 
+#[tracing::instrument(skip_all)]
 fn var_assignment_convert(pair: Pair<Rule>) -> Result<String, Report> {
     let mut inner = pair.into_inner();
 
@@ -219,35 +229,43 @@ fn var_assignment_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(format!("{} = {}", identifier_str, expr_parsed))
 }
 
+#[tracing::instrument(skip_all)]
 fn comparable_convert(pair: Pair<Rule>) -> Result<String, Report> {
     let inner = unwrap_inner(pair)?;
     Ok(inner.as_str().to_string())
 }
 
+#[tracing::instrument(skip_all)]
 fn compop_symbol_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(pair.as_str().to_string())
 }
 
+#[tracing::instrument(skip_all)]
 fn logicop_symbol_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(pair.as_str().to_string())
 }
 
+#[tracing::instrument(skip_all)]
 fn arithop_symbol_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(pair.as_str().to_string())
 }
 
+#[tracing::instrument(skip_all)]
 fn str_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(pair.as_str().to_string())
 }
 
+#[tracing::instrument(skip_all)]
 fn number_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(pair.as_str().to_string())
 }
 
+#[tracing::instrument(skip_all)]
 fn bool_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(pair.as_str().to_string())
 }
 
+#[tracing::instrument(skip_all)]
 fn byoption_convert(pair: Pair<Rule>) -> Result<String, Report> {
     Ok(pair.as_str().to_string())
 }
