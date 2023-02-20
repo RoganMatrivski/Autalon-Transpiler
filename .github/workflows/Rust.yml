@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
-      contents: read
+      contents: write
     steps:
       - uses: actions/checkout@v3
       # Setup cache
@@ -152,6 +152,7 @@ jobs:
         with:
           package: ./pkg/package.json
           token: ${{ secrets.NPM_TOKEN }}
+          greater-version-only: true
       # Build package with the username scope
       - run: wasm-pack build --release -s ${{github.repository_owner}}
       # Setup node with registry-url
@@ -162,10 +163,13 @@ jobs:
       - run: echo '@${{github.repository_owner}}:registry=https://npm.pkg.github.com' > .npmrc
         working-directory: ./pkg
       # Publish package
-      - run: npm publish
-        working-directory: ./pkg
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      # Then, publish to NPM
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          registry: https://npm.pkg.github.com/
+          package: ./pkg/package.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+          greater-version-only: true
       - name: Commit new bumped version
         uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
         with:
