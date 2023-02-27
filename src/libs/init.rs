@@ -2,7 +2,7 @@ use tracing_error::ErrorLayer;
 use tracing_subscriber::prelude::*;
 use wasm_bindgen::JsValue;
 
-pub fn init() -> Result<(), JsValue> {
+pub fn wasm_init() -> Result<(), JsValue> {
     set_up_errhook();
 
     // tracing_wasm::set_as_global_default();
