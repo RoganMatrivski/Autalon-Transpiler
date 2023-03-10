@@ -24,8 +24,6 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.By as By
 
 import com.nawadata.nfunittestlibrary.*
-import com.nawadata.nfunittestlibrary.v2.*
-import com.nawadata.nfunittestlibrary.finder.webelementext.WebElementExtFrom
 
 WebUI.openBrowser("")
 WebUI.setViewPortSize(1280, 720)
